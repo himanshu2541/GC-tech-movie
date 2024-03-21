@@ -6,6 +6,7 @@ const connectDb = require("./db/connectDb");
 const errorHandler = require("./middlewares/errorMiddleware");
 const createError = require("http-errors");
 const morgan = require("morgan");
+const subscriptionRoute=require("./routes/subscriptionRoute");
 
 const port = process.env.PORT || 5000;
 connectDb();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false })); // url encoded
 // routes
 app.use("/user", userRoute);
 app.use("/admin", adminRoute);
+app.use("/subscription",subscriptionRoute);
 
 app.all("*", async (req, res, next) => {
   next(createError.NotFound(`Can't find ${req.originalUrl} on this server!`));
