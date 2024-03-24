@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const userRoleSchema = new mongoose.Schema(
   {
     UserId:{
-        type:String,
-        required:true
-    },
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'User',
+      required:true
+  },
     Role:{
         type:[String],
         required:true,
