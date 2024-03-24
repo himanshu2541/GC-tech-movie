@@ -9,6 +9,8 @@ const createError = require("http-errors");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const paymentRoute = require("./routes/Payment_orderRoute");
+
 
 const subscriptionRoute = require("./routes/subscriptionRoute");
 
@@ -29,6 +31,7 @@ app.use("/user", userRoute);
 app.use("/admin", adminRoute);
 app.use("/refresh-token", refreshRoute);
 app.use("/subscription", subscriptionRoute);
+app.use("/payment", paymentRoute);
 
 app.all("*", async (req, res, next) => {
   next(createError.NotFound(`Can't find ${req.originalUrl} on this server!`));
