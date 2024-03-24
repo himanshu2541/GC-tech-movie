@@ -35,6 +35,21 @@ router.post("/create/order-id", async (req, res) => {
           }
           throw createError.BadRequest();
     }
-})
+});
+
+router.post("/verify", (req, res) => {
+    
+    let body = req.body.response.razorpay.order_id + "|" + req.body.response.payment_id;
+
+    var crypto = require("crypto");
+    var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+                            .update(body.toString())
+                            .digest('hex');
+    console.log("sig Received", req.body.response.razorpay_signature);
+    console.log("sig generated", expectedSignature);
+
+    response = {"signatureIsValid":"true"}
+    res.send(response);
+});
 
 module.exports = router;
