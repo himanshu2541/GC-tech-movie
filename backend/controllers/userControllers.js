@@ -11,7 +11,7 @@ const {
 } = require("../middlewares/validation");
 const generateToken = require("../helpers/generateToken");
 const UserToken = require("../models/userTokenModel");
-
+const tokenCookieOptions = require("../config/tokenCookieOptions");
 // Login user
 // post request with email and password
 // public access
@@ -35,7 +35,6 @@ const loginUser = asyncHandler(async (req, res) => {
     throw createError.NotFound("User not found");
   }
 
-
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
@@ -49,30 +48,20 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const userRole = await UserRole.findOne({ UserId: user._id });
 
-
   if (!userRole) {
     throw createError.InternalServerError();
   }
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, tokenCookieOptions)
+    .cookie("refreshToken", refreshToken, tokenCookieOptions)
     .json({
       message: "User logged in successfully",
       success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: userRole.Role,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
+      roles: userRole.Role,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
 });
 
@@ -131,25 +120,17 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!accessToken || !refreshToken) {
     throw createError.InternalServerError();
   }
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, tokenCookieOptions)
+    .cookie("refreshToken", refreshToken, tokenCookieOptions)
     .json({
       message: "User created successfully",
       success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: userRole.Role,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
+      roles: userRole.Role,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
 });
 
