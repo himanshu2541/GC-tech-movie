@@ -9,6 +9,7 @@ const createError = require("http-errors");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const corsOptions = require("./config/corsOptions");
 
 const subscriptionRoute = require("./routes/subscriptionRoute");
 
@@ -16,12 +17,6 @@ const port = process.env.PORT || 5000;
 connectDb();
 
 const app = express();
-
-const corsOptions = {
-  origin: true,
-  credentials: true,
-  exposedheaders: ["set-cookie"],
-};
 
 app.use(cors(corsOptions));
 app.use(morgan("dev"));

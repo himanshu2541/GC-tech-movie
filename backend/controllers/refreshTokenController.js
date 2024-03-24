@@ -4,16 +4,15 @@ const { verifyRefreshToken } = require("../helpers/jwt_helper");
 const User = require("../models/userModel");
 const generateToken = require("../helpers/generateToken");
 const UserToken = require("../models/userTokenModel");
-const tokenCookieOptions = require("../helpers/tokenCookieOptions");
+const tokenCookieOptions = require("../config/tokenCookieOptions");
 const userRoleModel = require("../models/userRoleModel");
 
 module.exports = {
   getNewRefreshToken: expressAsyncHandler(async (req, res) => {
-    console.log(req.cookies);
+    // console.log(req.cookies);
 
-    const refresh_token =
-      req.cookies?.refreshToken ||
-      req.header("Authorization")?.replace("Bearer ", "");
+    const refresh_token = req.cookies?.refreshToken;
+    // || req.header("Authorization")?.replace("Bearer ", "");
 
     if (!refresh_token) {
       throw createError.Unauthorized();
@@ -49,9 +48,7 @@ module.exports = {
       .json({
         accessToken,
         refreshToken,
-        user: {
-          roles: role.Role,
-        },
+        roles: role.Role,
       });
   }),
 
@@ -70,7 +67,11 @@ module.exports = {
     }
 
     await UserToken.deleteOne({ token: refreshToken });
-
-    res.status(200).json({ message: "Logout successfully" });
+    
+    res
+      .status(200)
+      .clearCookie("accessToken")
+      .clearCookie("refreshToken")
+      .json({ message: "Logout successfully" });
   }),
 };

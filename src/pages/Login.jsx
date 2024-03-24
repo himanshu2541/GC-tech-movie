@@ -44,9 +44,9 @@ const Login = () => {
 
       const accessToken = response?.data?.accessToken;
       const refreshToken = response?.data?.refreshToken;
-      const user = response?.data?.user;
+      const roles = response?.data?.roles;
 
-      setAuth((prev) => ({ ...prev, accessToken, user, refreshToken }));
+      setAuth((prev) => ({ ...prev, accessToken, roles, refreshToken }));
 
       navigate(from, { replace: true });
     } catch (error) {

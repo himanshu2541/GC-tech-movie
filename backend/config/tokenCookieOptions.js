@@ -4,8 +4,10 @@ const httpOnly = true;
 
 const tokenCookieOptions = {
   httpOnly: httpOnly,
-  sameSite: SAME_SITE,
-  // secure: SECURE_COOKIE,
+  sameSite: true,
+  secure: SECURE_COOKIE,
+  // maxAge: 90 * 24 * 60 * 60 * 1000,
+  expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
 };
 
 module.exports = tokenCookieOptions;

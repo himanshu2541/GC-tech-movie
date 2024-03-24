@@ -11,15 +11,16 @@ const useRefreshToken = () => {
         Authorization: `Bearer ${auth?.refreshToken}`,
       },
       withCredentials: true,
+      credentials: "include",
     });
     setAuth((prev) => {
       return {
         ...prev,
         accessToken: response.data?.accessToken,
         refreshToken: response.data?.refreshToken,
-        user: response.data?.user,
+        roles: response.data?.roles,
       };
-    });
+  });
     return response.data?.accessToken;
   };
   return refresh;

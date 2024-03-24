@@ -11,7 +11,7 @@ const {
 } = require("../middlewares/validation");
 const generateToken = require("../helpers/generateToken");
 const UserToken = require("../models/userTokenModel");
-const tokenCookieOptions = require("../helpers/tokenCookieOptions");
+const tokenCookieOptions = require("../config/tokenCookieOptions");
 // Login user
 // post request with email and password
 // public access
@@ -59,11 +59,7 @@ const loginUser = asyncHandler(async (req, res) => {
     .json({
       message: "User logged in successfully",
       success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: userRole.Role,
-      },
+      roles: userRole.Role,
       accessToken: accessToken,
       refreshToken: refreshToken,
     });
@@ -132,11 +128,7 @@ const registerUser = asyncHandler(async (req, res) => {
     .json({
       message: "User created successfully",
       success: true,
-      user: {
-        name: user.name,
-        email: user.email,
-        role: userRole.Role,
-      },
+      roles: userRole.Role,
       accessToken: accessToken,
       refreshToken: refreshToken,
     });
