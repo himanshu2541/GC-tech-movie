@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const userRoleSchema = new mongoose.Schema(
   {
     UserId:{
@@ -8,10 +9,10 @@ const userRoleSchema = new mongoose.Schema(
       required:true
   },
     Role:{
-        type:String,
+        type:[String],
         required:true,
         enum : ["admin","tier1","tier2","tier3","tier4"],
-        default:"tier4"
+        default:["tier4"]
     }
   },
   {

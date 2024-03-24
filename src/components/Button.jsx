@@ -8,9 +8,11 @@ const Button = ({
   disabled,
   outline,
   small,
+  type="button",
 }) => {
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={disabled}
       className={`relative disabled:opacity-70 disbaled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full 

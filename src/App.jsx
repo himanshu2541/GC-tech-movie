@@ -1,27 +1,53 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import { Home, Login, Register } from "./pages";
 import Layout from "./layout/Layout";
 import FlowBiteCarousel from "./components/Carousel";
 import PaginatedItems from "./components/search-pagination/Pagination";
 import Subscription from "./pages/Subscription";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
+import NotFound from "./pages/NotFound";
+import Unauthorized from "./pages/Unauthorized";
+import GetAllUsers from "./pages/GetAllUsers";
+import Links from "./pages/Links";
+
+const ROLES = {
+  user:["tier1", "tier2", "tier3", "tier4"],
+  admin:["admin"] 
+}
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path = "/links" element = {<Links />} />
+      {/* Private routes */}
+      <Route
+        element={
+          <ProtectedRoutes
+            allowedRoles={ROLES.user}
+          />
+        }
+      >
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="test" element={<FlowBiteCarousel />} />
-          <Route path="/search/" element={<PaginatedItems itemsPerPage={6} />} />
+          <Route
+            path="/search/"
+            element={<PaginatedItems itemsPerPage={6} />}
+          />
           <Route path="/subscription" element={<Subscription />} />
         </Route>
-          
-      </Routes>
-    </BrowserRouter>
+      </Route>
+
+      <Route element={<ProtectedRoutes allowedRoles={ROLES.admin} />}>
+        <Route path="/get-users" element={<GetAllUsers />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
