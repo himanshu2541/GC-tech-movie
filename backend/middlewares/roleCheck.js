@@ -5,7 +5,7 @@ const expressAsyncHandler = require("express-async-handler");
 
 const roleCheck = (roles) => {
   return expressAsyncHandler(async (req, res, next) => {
-    roles.push("tier4");
+    // roles.push("tier4");
     const { id } = req.payload;
     req.user = await User.findById(id).select("-password");
 
@@ -20,6 +20,8 @@ const roleCheck = (roles) => {
     }
 
     req.user.roles = role.Role;
+
+    // checking if req.user.roles have the role required
 
     if (!req.user.roles.includes(...roles)) {
       throw createError.Unauthorized();

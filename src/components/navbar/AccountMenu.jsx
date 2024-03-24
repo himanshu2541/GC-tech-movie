@@ -1,10 +1,29 @@
 import React from "react";
 import MenuItem from "./MenuItem";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { axiosPrivate } from "../../api/axios";
+import { useAuth } from "../../hooks/useAuth";
 
+const LOGOUT_URL = "refresh-token"; // delete request
 const AccountMenu = ({ isOpen }) => {
   const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await axiosPrivate.delete(LOGOUT_URL, {
+        headers: {
+          Authorization: `Bearer ${auth?.accessToken}`,
+        },
+        withCredentials: true,
+        credentials: "include",
+      });
+      setAuth({});
+      navigate("/login");
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
 
   return (
     <div>
@@ -18,6 +37,7 @@ const AccountMenu = ({ isOpen }) => {
           "
           >
             <MenuItem
+<<<<<<< HEAD
               onClick={() => {}}
               label="Profile"
               className={"text-primary-red"}
@@ -32,6 +52,9 @@ const AccountMenu = ({ isOpen }) => {
                 navigate("/login");
                 Cookies.remove("token", { path: "" }); // removed!
               }}
+=======
+              onClick={handleLogout}
+>>>>>>> c01d8424f8e2ef8417b4900e0b4f81730c4985f4
               label="Log out"
               className={"text-primary-red"}
             />
