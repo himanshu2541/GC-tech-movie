@@ -1,8 +1,9 @@
 import React from "react";
 import MenuItem from "./MenuItem";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const AccountMenu = ({isOpen}) => {
+const AccountMenu = ({ isOpen }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +17,14 @@ const AccountMenu = ({isOpen}) => {
             cursor-pointer
           "
           >
-            <MenuItem onClick={() => {navigate('/login')}} label="Log out" className={'text-primary-red'}/>
+            <MenuItem
+              onClick={() => {
+                navigate("/login");
+                Cookies.remove("token", { path: "" }); // removed!
+              }}
+              label="Log out"
+              className={"text-primary-red"}
+            />
           </div>
         </div>
       )}

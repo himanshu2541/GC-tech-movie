@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   updateUser,
   deleteUser,
@@ -6,27 +7,18 @@ const {
   registerUser,
   userProfile,
 } = require("../controllers/userControllers");
-const { protect } = require("../middlewares/authMiddleware");
-const {
-  createEmailChain,
-  createPasswordChain,
-  createNameChain,
-} = require("../middlewares/validationChains");
+
+const { verifyAccessToken } = require("../helpers/jwt_helper");
 
 const router = express.Router();
 
-router
-  .route("/login")
-  .post(createEmailChain(), createPasswordChain(), loginUser);
+router.route("/login").post(loginUser);
 
+router.route("/register").post(registerUser);
 router
-  .route("/register")
-  .post(createNameChain(), createEmailChain(), createPasswordChain(), registerUser);
-
-router
-  .route("/")
-  .patch(protect, updateUser)
-  .delete(protect, deleteUser)
-  .get(protect, userProfile);
+.route("/")
+  .patch(verifyAccessToken, updateUser)
+  .delete(verifyAccessToken, deleteUser)
+  .get(verifyAccessToken, userProfile);
 
 module.exports = router;

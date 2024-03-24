@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Input = ({
   id,
@@ -7,15 +7,16 @@ const Input = ({
   required,
   register,
   errors,
-  autocomplete='off',
+  autocomplete = "off",
   inputStyles,
-  labelStyles
+  labelStyles,
+  validate = () => {},
 }) => {
   return (
-    <div className='w-full relative'>
+    <div className="w-full relative">
       <input
         id={id}
-        {...register(id, { required })}
+        {...register(id, { required, validate: validate })}
         placeholder=" "
         autoComplete={autocomplete}
         type={type}
@@ -61,8 +62,11 @@ const Input = ({
       >
         {label}
       </label>
+      {errors[id] && (
+        <p className="text-red-300 text-xs">*{errors[id].message}</p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Input
+export default Input;
