@@ -6,8 +6,9 @@ import axios from "axios";
 
 function Cards({ currentItems }) {
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {currentItems && currentItems.map((movie) => <Card movie={movie} />)}
+    <div className="grid grid-cols-5 gap-3">
+      {currentItems &&
+        currentItems.map((movie) => <Card key={movie.id} movie={movie} />)}
     </div>
   );
 }
@@ -60,11 +61,11 @@ function PaginatedItems({ itemsPerPage }) {
         className="bottom-5 absolute flex justify-center items-center gap-2 "
         linkClass=" p-2 rounded-md border border-black"
         pageLinkClassName="p-2 rounded-md border"
-        activeLinkClassName="bg-blue-500 text-white p-2 rounded-md"
+        activeLinkClassName="bg-primary-red text-white p-2 rounded-md"
         previousLinkClassName="p-2 rounded-md border"
         nextLinkClassName="p-2 rounded-md border"
         breakLinkClassName="p-2 rounded-md border"
-        disabledLinkClassName="p-2 rounded-md border border-gray-300 text-gray-300 cursor-default"
+        disabledLinkClassName="text-primary-black border-0 cursor-default"
       />
     </div>
   );

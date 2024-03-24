@@ -1,32 +1,39 @@
 import React from "react";
 import MovieSections from "../home/MovieSections";
+import { GoStarFill } from "react-icons/go";
+import { IoPlay } from "react-icons/io5";
 const Hero = () => {
   return (
     <div className="w-full h-[50rem] text-white relative select-none">
-      <div className="w-full h-full ">
+      <div className="w-full h-full">
         <div className="absolute w-full h-inherit bg-gradient-to-r from-black z-10" />
         <img
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover blur-sm z-0 brightness-[0.35]"
           src={`/register.jpg`}
           alt="{movie background}"
         />
-        <div className="absolute w-full top-[20%] p-4 md:p-8 z-20">
-          <h1 className="text-3xl md:4xl font-bold ">
-            Transformers: Age of Extinction
+        <div className="absolute w-1/2 top-[12%] p-6 md:p-10 z-20">
+          <h1 className="text-5xl font-semibold ">
+            Transformers: Age of Extinction tftt Lorem ipsum dolor sit amet.
+            Lorem ipsum dolor sit amet.
           </h1>
-          <div className="my-4">
-            <button className="border bg-gray-300 text-black border-gray-300 py-2 px-5">
-              Play
-            </button>
-            <button className="border text-white border-gray-300 py-2 px-5 ml-4">
-              Watch Later
+          <h2 className="mt-4 text-lg line-clamp-2 text-[#d6d5d4]">
+            The Avengers is a 2012 American superhero film based on the Marvel
+            Comics superhero team of the same name. Produced by Marvel Studios
+            and
+          </h2>
+          <div className="my-4 text-lg">
+            <button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
+              <IoPlay /> Play
             </button>
           </div>
           <div>
-            <p className="text-gray-400 text-sm">Released : 2008</p>
-            <p className="w-full md:w-[70%] lg:w-[50%] xl:w-[35%] text-gray-200">
-              8.3
-            </p>
+            <p className=" text-md mb-2">Released : 2008</p>
+            <div className="flex items-center text-md ">
+              <p className=" text-xl font-semibold">8.3</p>
+              <p className=" text-orange-200 text-lg mr-2">/10</p>
+              <GoStarFill size={22} className="text-yellow-400" />
+            </div>
           </div>
         </div>
       </div>

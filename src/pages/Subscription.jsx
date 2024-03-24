@@ -5,11 +5,11 @@ const Subscription = () => {
     <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
         <div>
-          <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+          <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider  uppercase rounded-full bg-teal-accent-400">
             Our Subscriptions
           </p>
         </div>
-        <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+        <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight  sm:text-4xl md:mx-auto">
           <span className="relative inline-block">
             <svg
               viewBox="0 0 52 24"
@@ -37,7 +37,7 @@ const Subscription = () => {
           </span>{" "}
           <span></span>
         </h2>
-        <p className="text-base text-gray-700 md:text-lg">
+        <p className="text-base md:text-lg">
           Choose the plan that’s right for you
         </p>
       </div>
@@ -51,13 +51,13 @@ const Subscription = () => {
         <SubsCard
           title={"Standard"}
           price={"$20"}
-          res={"Stream at 720p(HD"}
+          res={"Stream at 720p(HD)"}
           content={"2 Devices at a time"}
         />
         <SubsCard
           title={"Premium"}
           price={"$30"}
-          res={"Stream at 1080p(Full HD"}
+          res={"Stream at 1080p(Full HD)"}
           content={"4 Devices at a time"}
         />
       </div>
