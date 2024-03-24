@@ -44,9 +44,10 @@ const Register = () => {
         }
       );
 
+      const refreshToken = response?.data?.refreshToken;
       const accessToken = response?.data?.accessToken;
       const user = response?.data?.user;
-      setAuth({ ...auth, user, accessToken });
+      setAuth({ ...auth, user, accessToken, refreshToken });
 
       console.log(auth);
 

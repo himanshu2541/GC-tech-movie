@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const LOGIN_URL = "/user/login";
 
 const Login = () => {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -43,10 +43,10 @@ const Login = () => {
       );
 
       const accessToken = response?.data?.accessToken;
+      const refreshToken = response?.data?.refreshToken;
       const user = response?.data?.user;
-      setAuth({ ...auth, user, accessToken });
 
-      console.log(auth);
+      setAuth((prev) => ({ ...prev, accessToken, user, refreshToken }));
 
       navigate(from, { replace: true });
     } catch (error) {
@@ -69,6 +69,7 @@ const Login = () => {
       }
     }
   };
+
   return (
     <>
       <div className="w-full h-screen bg-primary-black grid grid-cols-3 overflow-hidden">

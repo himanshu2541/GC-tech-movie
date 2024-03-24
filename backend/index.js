@@ -17,8 +17,13 @@ connectDb();
 
 const app = express();
 
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  exposedheaders: ["set-cookie"],
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json()); // Body parser

@@ -3,25 +3,20 @@ const createError = require("http-errors");
 const { verifyRefreshToken } = require("../helpers/jwt_helper");
 const User = require("../models/userModel");
 const generateToken = require("../helpers/generateToken");
-const { refreshTokenSchema } = require("../middlewares/validation");
 const UserToken = require("../models/userTokenModel");
+const tokenCookieOptions = require("../helpers/tokenCookieOptions");
+const userRoleModel = require("../models/userRoleModel");
 
 module.exports = {
   getNewRefreshToken: expressAsyncHandler(async (req, res) => {
-    let result;
-    try {
-      result = await refreshTokenSchema.validateAsync(req.body);
-    } catch (error) {
-      if (error.isJoi === true) {
-        throw createError.UnprocessableEntity(error.details[0].message);
-      }
-      throw createError.BadRequest();
-    }
+    console.log(req.cookies);
 
-    const refresh_token = result.refreshToken;
+    const refresh_token =
+      req.cookies?.refreshToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
 
     if (!refresh_token) {
-      throw createError.BadRequest();
+      throw createError.Unauthorized();
     }
 
     const id = await verifyRefreshToken(refresh_token);
@@ -31,47 +26,39 @@ module.exports = {
     }
 
     const user = await User.findById(id).select("-password");
-
     if (!user) {
       throw createError.Unauthorized();
     }
 
     const userToken = await UserToken.findOne({ token: refresh_token });
-
     if (!userToken) {
       throw createError.Unauthorized();
     }
 
     const { accessToken, refreshToken } = await generateToken(id);
-
     if (!accessToken || !refreshToken) {
       throw createError.InternalServerError();
     }
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
+    const role = await userRoleModel.findOne({ UserId: id });
 
     res
       .status(200)
-      .cookie("refreshToken", refreshToken, options)
-      .cookie("accessToken", accessToken, options)
-      .json({ accessToken, refreshToken });
+      .cookie("refreshToken", refreshToken, tokenCookieOptions)
+      .cookie("accessToken", accessToken, tokenCookieOptions)
+      .json({
+        accessToken,
+        refreshToken,
+        user: {
+          roles: role.Role,
+        },
+      });
   }),
 
   deleteRefreshToken: expressAsyncHandler(async (req, res) => {
-    let result;
-    try {
-      result = await refreshTokenSchema.validateAsync(req.body);
-    } catch (error) {
-      if (error.isJoi === true) {
-        throw createError.UnprocessableEntity(error.details[0].message);
-      }
-      throw createError.BadRequest();
-    }
-
-    const { refreshToken } = result;
+    const refreshToken =
+      req.cookies?.refreshToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
 
     if (!refreshToken) {
       throw createError.BadRequest();
@@ -83,7 +70,7 @@ module.exports = {
     }
 
     await UserToken.deleteOne({ token: refreshToken });
-    
+
     res.status(200).json({ message: "Logout successfully" });
   }),
 };

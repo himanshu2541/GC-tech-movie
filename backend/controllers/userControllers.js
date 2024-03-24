@@ -11,7 +11,7 @@ const {
 } = require("../middlewares/validation");
 const generateToken = require("../helpers/generateToken");
 const UserToken = require("../models/userTokenModel");
-
+const tokenCookieOptions = require("../helpers/tokenCookieOptions");
 // Login user
 // post request with email and password
 // public access
@@ -52,15 +52,10 @@ const loginUser = asyncHandler(async (req, res) => {
     throw createError.InternalServerError();
   }
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, tokenCookieOptions)
+    .cookie("refreshToken", refreshToken, tokenCookieOptions)
     .json({
       message: "User logged in successfully",
       success: true,
@@ -129,15 +124,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!accessToken || !refreshToken) {
     throw createError.InternalServerError();
   }
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, tokenCookieOptions)
+    .cookie("refreshToken", refreshToken, tokenCookieOptions)
     .json({
       message: "User created successfully",
       success: true,

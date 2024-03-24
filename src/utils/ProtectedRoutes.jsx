@@ -5,7 +5,7 @@ export default function ProtectedRoutes({ allowedRoles }) {
   const location = useLocation();
   const { auth } = useAuth();
   
-  // console.log(auth)
+  console.log(auth)
   return auth?.user?.role?.find((role) => allowedRoles.includes(role)) ? (
     <Outlet />
   ) : auth?.user ? (

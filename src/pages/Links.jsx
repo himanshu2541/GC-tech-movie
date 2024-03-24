@@ -8,6 +8,7 @@ const Links = () => {
       <Link to = '/login'>Login</Link>
       <Link to = '/register'>register</Link>
       <Link to ='/get-users'>Get Users</Link>
+      <Link to = '/me'>Account</Link>
     </div>
   )
 }
