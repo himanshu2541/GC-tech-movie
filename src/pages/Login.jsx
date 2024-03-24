@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import axios from "../api/axios";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 const LOGIN_URL = "/user/login";
 
 const loginSchema = z.object({
@@ -51,6 +52,7 @@ const Login = () => {
       const user = response?.data?.user;
 
       // console.log(user)
+
       setAuth({ token, user });
       Cookies.set("token", token, { secure: true });
 

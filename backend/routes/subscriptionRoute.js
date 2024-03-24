@@ -1,10 +1,10 @@
 const express = require("express");
 const { updateUserRole } = require("../controllers/subscriptionController");
-const { protect } = require("../middlewares/authMiddleware");
+const { verifyAccessToken } = require("../helpers/jwt_helper");
 
 
 const router = express.Router();
 
-router.route("/updateRole").put(protect,updateUserRole);
+router.route("/updateRole").put(verifyAccessToken, updateUserRole);
 
 module.exports = router;

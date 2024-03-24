@@ -7,12 +7,14 @@ const {
   loginSchema,
   registerSchema,
   updateUserSchema,
+  deleteUserSchema,
 } = require("../middlewares/validation");
 const generateToken = require("../helpers/generateToken");
+const UserToken = require("../models/userTokenModel");
+
 // Login user
 // post request with email and password
 // public access
-
 const loginUser = asyncHandler(async (req, res) => {
   // validating the body
   let result;
@@ -33,21 +35,45 @@ const loginUser = asyncHandler(async (req, res) => {
     throw createError.NotFound("User not found");
   }
 
-  // Checking for password
-  if (user && (await bcrypt.compare(password, user.password))) {
-    const { accessToken, refreshToken } = await generateToken(user._id);
 
-    if (!accessToken || !refreshToken) {
-      throw createError.InternalServerError();
-    }
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    res.status(200).json({
-      accessToken,
-      refreshToken,
-    });
-  } else {
+  if (!isPasswordCorrect) {
     throw createError.Unauthorized("Invalid Credentials");
   }
+
+  const { accessToken, refreshToken } = await generateToken(user._id);
+  if (!accessToken || !refreshToken) {
+    throw createError.InternalServerError();
+  }
+
+  const userRole = await UserRole.findOne({ UserId: user._id });
+
+
+  if (!userRole) {
+    throw createError.InternalServerError();
+  }
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json({
+      message: "User logged in successfully",
+      success: true,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: userRole.Role,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    });
 });
 
 // Register user
@@ -101,18 +127,41 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const { accessToken, refreshToken } = await generateToken(user._id);
 
+  // checking for access token and refresh token
   if (!accessToken || !refreshToken) {
     throw createError.InternalServerError();
   }
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-  res.status(201).json({ accessToken, refreshToken });
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json({
+      message: "User created successfully",
+      success: true,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: userRole.Role,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    });
 });
 
 // update user
 // post request with password and new password
 // private access
 const updateUser = asyncHandler(async (req, res) => {
-  // id we are getting from auth middleware
+  // validating the body
+  // extracting id from payload -> which we are getting from the middleware
+  // checking for user existance
+  // confirming the user password
+  // updating the user password
 
   let result;
   try {
@@ -129,15 +178,10 @@ const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.payload;
 
   if (!id) {
-    throw createError.BadRequest("Please provide id");
-  }
-
-  if (!password || !newPassword) {
-    throw createError.BadRequest("Please provide password and new password");
+    throw createError.BadRequest();
   }
 
   // checking for user existance
-
   const user = await User.findById(id);
 
   if (!user) {
@@ -166,7 +210,6 @@ const updateUser = asyncHandler(async (req, res) => {
   if (!updatedUser) {
     throw createError.InternalServerError();
   }
-
   res.status(200).json({ msg: "Password updated", success: true });
 });
 
@@ -175,8 +218,23 @@ const updateUser = asyncHandler(async (req, res) => {
 // private access
 
 const deleteUser = asyncHandler(async (req, res) => {
+  // checking for validation
+  // checking for id
+  // checking for user existance
+  //  confirming the user password
+  // deleting the user
+  let result;
+  try {
+    result = await deleteUserSchema.validateAsync(req.body);
+  } catch (error) {
+    if (error.isJoi === true) {
+      throw createError.UnprocessableEntity(error.details[0].message);
+    }
+    throw createError.BadRequest();
+  }
+
   const { id } = req.payload;
-  const { password } = req.body;
+  const { password } = result;
 
   if (!id) {
     throw createError.BadRequest("Please provide id");
@@ -192,19 +250,26 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 
   // confirming the user password
-  if (user && (await bcrypt.compare(password, user.password))) {
-    await User.findByIdAndDelete(id);
-    res.status(200).json({ msg: "User deleted", success: true });
-  } else {
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect) {
     throw createError.Unauthorized("Invalid Credentials");
   }
+
+  // deleting the user
+  const deletedUser = await User.findByIdAndDelete(id);
+  if (!deletedUser) {
+    throw createError.InternalServerError();
+  }
+  await UserRole.deleteOne({ UserId: id });
+  await UserToken.deleteOne({ userId: id });
+
+  res.status(200).json({ msg: "User deleted", success: true });
 });
 
 // user profile
 // get request
 // private access
 const userProfile = asyncHandler(async (req, res) => {
-
   const { id } = req.payload;
   const user = await User.findById(id).select("-password");
 
@@ -220,7 +285,6 @@ const userProfile = asyncHandler(async (req, res) => {
     email: email,
     role: role.Role,
   });
-  
 });
 
 module.exports = {

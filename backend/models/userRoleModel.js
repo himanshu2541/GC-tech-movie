@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const userRoleSchema = new mongoose.Schema(
   {
     UserId:{
-      type:mongoose.Schema.Types.ObjectId,
+      type: String,
       ref:'User',
       required:true
   },

@@ -11,7 +11,7 @@ module.exports = {
       const secret = process.env.JWT_SECRET;
 
       const options = {
-        expiresIn: "60s",
+        expiresIn: "10m",
         issuer: "kgplay",
       };
 
