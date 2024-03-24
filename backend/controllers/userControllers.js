@@ -35,7 +35,6 @@ const loginUser = asyncHandler(async (req, res) => {
     throw createError.NotFound("User not found");
   }
 
-
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
   if (!isPasswordCorrect) {
@@ -48,7 +47,6 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   const userRole = await UserRole.findOne({ UserId: user._id });
-
 
   if (!userRole) {
     throw createError.InternalServerError();
@@ -70,9 +68,9 @@ const loginUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         role: userRole.Role,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
       },
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
 });
 
@@ -147,9 +145,9 @@ const registerUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         role: userRole.Role,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
       },
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
 });
 

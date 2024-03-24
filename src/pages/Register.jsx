@@ -4,50 +4,10 @@ import { Heading1, Input, Button } from "../components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
-import Cookies from "js-cookie";
-import { z } from "zod";
+import { registerSchema } from "../utils/ValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const REGISTER_URL = "user/register";
-const NAME_REGEX = /^[a-zA-Z]+$/;
-const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-const registerSchema = z
-  .object({
-    name: z
-      .string({
-        required_error: "Name is required",
-        invalid_type_error: "Name must be a string",
-      })
-      .trim()
-      .min(3, "Name must be at least 3 characters")
-      .regex(NAME_REGEX, {
-        message: "Name must only contain letters",
-      }),
-    email: z
-      .string({
-        required_error: "Email is required",
-        invalid_type_error: "Email must be a valid email",
-      })
-      .trim()
-      .email(),
-
-    password: z
-      .string()
-      .trim()
-      .min(8, "Password too short")
-      .regex(
-        PASSWORD_REGEX,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      ),
-
-    confirmPassword: z.string().trim(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
 
 const Register = () => {
   const { auth, setAuth } = useAuth();
@@ -71,10 +31,11 @@ const Register = () => {
   });
 
   const submitRegisterData = async (data) => {
+    const { name, email, password } = data;
     try {
       const response = await axios.post(
         `${REGISTER_URL}`,
-        JSON.stringify(data),
+        JSON.stringify({ name, email, password }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -82,13 +43,12 @@ const Register = () => {
           },
         }
       );
-      const token = response?.data?.token;
+
+      const accessToken = response?.data?.accessToken;
       const user = response?.data?.user;
+      setAuth({ ...auth, user, accessToken });
 
-      setAuth({ token, user });
-      Cookies.set("token", token, { secure: true });
-
-      // console.log(auth);
+      console.log(auth);
 
       navigate(from, { replace: true });
     } catch (error) {

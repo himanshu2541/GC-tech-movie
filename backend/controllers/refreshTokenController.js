@@ -79,10 +79,11 @@ module.exports = {
 
     const userToken = await UserToken.findOne({ token: refreshToken });
     if (!userToken) {
-      throw createError.Unauthorized();
+      throw createError.InternalServerError();
     }
 
     await UserToken.deleteOne({ token: refreshToken });
+    
     res.status(200).json({ message: "Logout successfully" });
   }),
 };

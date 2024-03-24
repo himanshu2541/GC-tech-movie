@@ -3,21 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Heading1, Input, Button } from "../components";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
-import Cookies from "js-cookie";
 import axios from "../api/axios";
-import { z } from "zod";
+import { loginSchema } from "../utils/ValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const LOGIN_URL = "/user/login";
-
-const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required")
-    .email("Enter a valid email"),
-  password: z.string().trim().min(1, "Password is required"),
-});
 
 const Login = () => {
   const { auth, setAuth } = useAuth();
@@ -39,29 +29,28 @@ const Login = () => {
   });
 
   const handleLogin = async (data) => {
-
+    const { email, password } = data;
     try {
-      const response = await axios.post(`${LOGIN_URL}`, JSON.stringify(data), {
-        headers: {
-          "Content-Type": "application/json",
-          withCredentials: true,
-        },
-      });
+      const response = await axios.post(
+        `${LOGIN_URL}`,
+        JSON.stringify({ email, password }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            withCredentials: true,
+          },
+        }
+      );
 
-      const token = response?.data?.token;
+      const accessToken = response?.data?.accessToken;
       const user = response?.data?.user;
+      setAuth({ ...auth, user, accessToken });
 
-      // console.log(user)
-
-      setAuth({ token, user });
-      Cookies.set("token", token, { secure: true });
-
-      // console.log(auth);
+      console.log(auth);
 
       navigate(from, { replace: true });
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error?.response?.status === 404) {
         setError("root", {
           type: "manual",
@@ -109,7 +98,7 @@ const Login = () => {
               <Input
                 id="email"
                 label="Email"
-                type="email"
+                type="text"
                 register={register}
                 errors={errors}
                 required
