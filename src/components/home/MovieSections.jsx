@@ -1,20 +1,27 @@
 import React, { useRef, useState } from "react";
-import CardsTemplateExample from "../hero/CardsTemplateExample";
+import Card from "../Card";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { motion } from "framer-motion";
+import MoviesData from "../search-pagination/Moviedata";
 const MovieSections = ({ title = "" }) => {
   const ref = useRef(null);
   const [translate, setTranslate] = useState(0);
 
+  const cardWidth = 192; // replace with the actual width of your card
+  const cardSpacing = 16;
+  const totalCards = MoviesData.length;
+  const totalCardWidth = (cardSpacing + cardWidth) * totalCards;
+
   const handleTranslate = (direction) => {
-    console.log(ref.current.innerWidth);
+    const containerWidth = ref.current.offsetWidth;
     if (direction === "left") {
-      if(translate<0){
-        setTranslate(translate +  window.innerWidth -500);
+      if (translate < 0) {
+        setTranslate(translate + window.innerWidth - 500);
       }
-      
     } else if (direction === "right") {
-      setTranslate(translate - window.innerWidth + 500);
+      if (Math.abs(translate) < totalCardWidth - containerWidth) {
+        setTranslate(translate - window.innerWidth + 500);
+      }
     }
   };
   return (
@@ -27,36 +34,22 @@ const MovieSections = ({ title = "" }) => {
             handleTranslate("left");
           }}
         >
-          <GrPrevious size={40} />
+          <GrPrevious size={50} className="z-50" />
         </div>
         <motion.div
           className="flex items-end gap-4 no-scrollbar py-8 px-4"
           animate={{ x: translate }}
           ref={ref}
         >
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
-          <CardsTemplateExample />
+          {MoviesData.map((movie) => (
+            <Card key={movie.id} movie={movie} />
+          ))}
         </motion.div>
         <div
           className="absolute right-0 bottom-0 bg-gradient-to-l from-primary-black to-transparent h-64 w-20 flex items-center justify-center cursor-pointer mb-8"
           onClick={() => handleTranslate("right")}
         >
-          <GrNext size={40} />
+          <GrNext size={50} className="z-50" />
         </div>
       </div>
     </div>

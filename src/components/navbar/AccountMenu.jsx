@@ -9,14 +9,24 @@ const AccountMenu = ({ isOpen }) => {
   return (
     <div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-40 right-2 bg-white overflow-hidden top-4 text-sm">
+        <div className="absolute shadow-md w-36 right-6 top-4 text-xs">
           <div
             className="
             flex
-            flex-col
-            cursor-pointer
+            flex-col gap-1
+            z-40
           "
           >
+            <MenuItem
+              onClick={() => {}}
+              label="Profile"
+              className={"text-primary-red"}
+            />
+            <MenuItem
+              onClick={() => {}}
+              label="Change Password"
+              className={"text-primary-red"}
+            />
             <MenuItem
               onClick={() => {
                 navigate("/login");

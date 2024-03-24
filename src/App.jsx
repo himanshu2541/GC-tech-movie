@@ -12,32 +12,33 @@ import GetAllUsers from "./pages/GetAllUsers";
 import Links from "./pages/Links";
 
 const ROLES = {
-  user:["tier1", "tier2", "tier3", "tier4"],
-  admin:["admin"] 
-}
+  user: ["tier1", "tier2", "tier3", "tier4"],
+  admin: ["admin"],
+};
 
 const App = () => {
   return (
     <Routes>
-      {/* Public routes */}
+      {/* Public routes
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path = "/links" element = {<Links />} />
-      {/* Private routes */}
+      {/* Private routes 
       <Route
         element={
           <ProtectedRoutes
             allowedRoles={ROLES.user}
           />
         }
-      >
+      > */}
+      <Route>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="test" element={<FlowBiteCarousel />} />
           <Route
             path="/search/"
-            element={<PaginatedItems itemsPerPage={6} />}
+            element={<PaginatedItems itemsPerPage={10} />}
           />
           <Route path="/subscription" element={<Subscription />} />
         </Route>
