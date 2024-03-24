@@ -9,6 +9,7 @@ const createError = require("http-errors");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const corsOptions = require("./config/corsOptions");
 const paymentRoute = require("./routes/Payment_orderRoute");
 
 
@@ -19,8 +20,7 @@ connectDb();
 
 const app = express();
 
-
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json()); // Body parser

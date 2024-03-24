@@ -21,6 +21,8 @@ const roleCheck = (roles) => {
 
     req.user.roles = role.Role;
 
+    // checking if req.user.roles have the role required
+
     if (!req.user.roles.includes(...roles)) {
       throw createError.Unauthorized();
     }
