@@ -50,7 +50,7 @@ const Login = () => {
 
       navigate(from, { replace: true });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error?.response?.status === 404) {
         setError("root", {
           type: "manual",

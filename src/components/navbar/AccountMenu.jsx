@@ -5,7 +5,7 @@ import { axiosPrivate } from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 
 const LOGOUT_URL = "refresh-token"; // delete request
-const AccountMenu = ({ isOpen }) => {
+const AccountMenu = ({ isOpen, setOpen }) => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
 
@@ -25,6 +25,10 @@ const AccountMenu = ({ isOpen }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       {isOpen && (
@@ -37,24 +41,38 @@ const AccountMenu = ({ isOpen }) => {
           "
           >
             <MenuItem
-<<<<<<< HEAD
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/me");
+                handleClose();
+              }}
               label="Profile"
               className={"text-primary-red"}
             />
+
+            {/* get all users only access for admin */}
+            {auth && auth.roles.includes("admin") && (
+              <MenuItem
+                onClick={() => {
+                  navigate("/get-users");
+                }}
+                label={"All users"}
+                className={"text-primary-red"}
+              />
+            )}
+
             <MenuItem
-              onClick={() => {}}
+              onClick={() => {
+                handleClose();
+              }}
               label="Change Password"
               className={"text-primary-red"}
             />
+
             <MenuItem
               onClick={() => {
-                navigate("/login");
-                Cookies.remove("token", { path: "" }); // removed!
+                handleLogout();
+                handleClose();
               }}
-=======
-              onClick={handleLogout}
->>>>>>> c01d8424f8e2ef8417b4900e0b4f81730c4985f4
               label="Log out"
               className={"text-primary-red"}
             />

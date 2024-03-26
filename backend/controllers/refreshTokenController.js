@@ -9,10 +9,10 @@ const userRoleModel = require("../models/userRoleModel");
 
 module.exports = {
   getNewRefreshToken: expressAsyncHandler(async (req, res) => {
-    // console.log(req.cookies);
 
-    const refresh_token = req.cookies?.refreshToken;
-    // || req.header("Authorization")?.replace("Bearer ", "");
+    const refresh_token =
+      req.cookies?.refreshToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
 
     if (!refresh_token) {
       throw createError.Unauthorized();
@@ -29,7 +29,8 @@ module.exports = {
       throw createError.Unauthorized();
     }
 
-    const userToken = await UserToken.findOne({ token: refresh_token });
+    // checking if userToken exist and refreshing it
+    const userToken = await UserToken.findOneAndDelete({ token: refresh_token });
     if (!userToken) {
       throw createError.Unauthorized();
     }
@@ -58,16 +59,17 @@ module.exports = {
       req.header("Authorization")?.replace("Bearer ", "");
 
     if (!refreshToken) {
-      throw createError.BadRequest();
+      throw createError.Forbidden();
     }
 
     const userToken = await UserToken.findOne({ token: refreshToken });
+    
     if (!userToken) {
       throw createError.InternalServerError();
     }
 
     await UserToken.deleteOne({ token: refreshToken });
-    
+
     res
       .status(200)
       .clearCookie("accessToken")

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 
 import useRefreshToken from "../../hooks/useRefreshToken";
 import { useAuth } from "../../hooks/useAuth";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,12 +24,17 @@ const PersistLogin = () => {
     !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
-  // useEffect(() => {
-  //   console.log({ isLoading });
-  //   console.log(`at: ${JSON.stringify(auth?.accessToken)}`);
-  // }, [isLoading]);
-
-  return <>{isLoading ? <p>Loading...</p> : <Outlet />}</>;
+  return (
+    <>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-screen">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <Outlet />
+      )}
+    </>
+  );
 };
 
 export default PersistLogin;

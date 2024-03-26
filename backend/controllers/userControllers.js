@@ -12,6 +12,7 @@ const {
 const generateToken = require("../helpers/generateToken");
 const UserToken = require("../models/userTokenModel");
 const tokenCookieOptions = require("../config/tokenCookieOptions");
+const isSessionExists = require("../helpers/isSessionExists");
 // Login user
 // post request with email and password
 // public access
@@ -51,6 +52,9 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!userRole) {
     throw createError.InternalServerError();
   }
+
+  // checking if userToken exist and refreshing it
+  isSessionExists(req);
 
   return res
     .status(200)
@@ -121,6 +125,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw createError.InternalServerError();
   }
 
+  isSessionExists(req);
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, tokenCookieOptions)
@@ -158,10 +164,6 @@ const updateUser = asyncHandler(async (req, res) => {
 
   const { id } = req.payload;
 
-  if (!id) {
-    throw createError.BadRequest();
-  }
-
   // checking for user existance
   const user = await User.findById(id);
 
@@ -191,19 +193,20 @@ const updateUser = asyncHandler(async (req, res) => {
   if (!updatedUser) {
     throw createError.InternalServerError();
   }
+
   res.status(200).json({ msg: "Password updated", success: true });
 });
 
 // delete request
 // post request and password
 // private access
-
 const deleteUser = asyncHandler(async (req, res) => {
   // checking for validation
   // checking for id
   // checking for user existance
   //  confirming the user password
   // deleting the user
+
   let result;
   try {
     result = await deleteUserSchema.validateAsync(req.body);
@@ -214,12 +217,9 @@ const deleteUser = asyncHandler(async (req, res) => {
     throw createError.BadRequest();
   }
 
-  const { id } = req.payload;
+  const { id } = req.payload; // getting from verifyAccessToken
   const { password } = result;
 
-  if (!id) {
-    throw createError.BadRequest("Please provide id");
-  }
   if (!password) {
     throw createError.BadRequest("Please provide password");
   }
@@ -238,13 +238,19 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   // deleting the user
   const deletedUser = await User.findByIdAndDelete(id);
+
   if (!deletedUser) {
     throw createError.InternalServerError();
   }
-  await UserRole.deleteOne({ UserId: id });
-  await UserToken.deleteOne({ userId: id });
 
-  res.status(200).json({ msg: "User deleted", success: true });
+  await UserRole.deleteOne({ UserId: id });
+  await UserToken.deleteMany({ userId: id });
+
+  res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json({ msg: "User deleted", success: true });
 });
 
 // user profile

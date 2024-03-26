@@ -1,16 +1,22 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home, Login, Register } from "./pages";
+import {
+  Home,
+  Login,
+  Register,
+  NotFound,
+  Subscription,
+  Account,
+  GetAllUsers,
+  ChangePassword,
+  Unauthorized,
+  Links,
+} from "./pages";
+
 import Layout from "./layout/Layout";
 import FlowBiteCarousel from "./components/Carousel";
 import PaginatedItems from "./components/search-pagination/Pagination";
-import Subscription from "./pages/Subscription";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
-import NotFound from "./pages/NotFound";
-import Unauthorized from "./pages/Unauthorized";
-import GetAllUsers from "./pages/GetAllUsers";
-import Links from "./pages/Links";
-import Account from "./pages/Account";
 import PersistLogin from "./components/persistance/PersistLogin";
 
 const ROLES = {
@@ -41,6 +47,7 @@ const App = () => {
             />
             <Route path="/subscription" element={<Subscription />} />
             <Route path="/me" element={<Account />} />
+            <Route path="/change-password" element={<ChangePassword />} />
           </Route>
         </Route>
 

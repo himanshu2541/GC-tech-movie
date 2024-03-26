@@ -8,4 +8,5 @@ const {
 
 router.route("/").get(getNewRefreshToken);
 router.route("/").delete(deleteRefreshToken);
+
 module.exports = router;
