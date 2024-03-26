@@ -15,6 +15,7 @@ export default function ChangePassword() {
   const location = useLocation();
   const refresh = useRefreshToken();
   const [isPasswordUpdated, setIsPasswordUpdated] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -34,7 +35,7 @@ export default function ChangePassword() {
 
     try {
       await refresh();
-      const response = await axiosPrivate.patch(
+      await axiosPrivate.patch(
         CHANGE_PASSWORD_URL,
         JSON.stringify({ password, newPassword }),
         {

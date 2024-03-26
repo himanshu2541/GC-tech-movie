@@ -10,7 +10,6 @@ import {
   GetAllUsers,
   ChangePassword,
   Unauthorized,
-  Links,
 } from "./pages";
 
 import Layout from "./layout/Layout";
@@ -31,7 +30,6 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/links" element={<Links />} />
 
       {/* Private Routes */}
       {/* Persist User to pages */}

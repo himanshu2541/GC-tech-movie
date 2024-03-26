@@ -11,7 +11,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const corsOptions = require("./config/corsOptions");
 const paymentRoute = require("./routes/Payment_orderRoute");
-
+const searchRoute = require("./routes/searchRoute");
 
 const subscriptionRoute = require("./routes/subscriptionRoute");
 
@@ -32,6 +32,8 @@ app.use("/admin", adminRoute);
 app.use("/refresh-token", refreshRoute);
 app.use("/subscription", subscriptionRoute);
 app.use("/payment", paymentRoute);
+app.use("/search", searchRoute);
+
 
 app.all("*", async (req, res, next) => {
   next(createError.NotFound(`Can't find ${req.originalUrl} on this server!`));
