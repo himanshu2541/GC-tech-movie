@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import AccountMenu from "./AccountMenu";
-
+import { FaRegUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-between p-8 pt-10 w-full ">
-      <h1 className="text-red-600 text-4xl font-bold cursor-pointer">KGPLAY</h1>
+    <div className="flex items-center justify-between pl-10 pr-16 pt-10 w-full ">
+      <h1
+        className="text-red-600 text-4xl font-bold cursor-pointer"
+        onClick={() => navigate("/")}
+      >
+        KGPLAY
+      </h1>
       <div>
-        <button className="text-white pr-4">Favourites</button>
-        <button
-          className="bg-red-600 px-6 py-2 rounded cursor-pointer relative"
+        <FaRegUserCircle
+          size={35}
+          className="cursor-pointer relative"
           onClick={() => setOpen(!isOpen)}
-        >
-          Account
-          <div className="absolute w-24 h-32">
-            <AccountMenu isOpen={isOpen} />
-          </div>
-        </button>
+        />
+        <div className="absolute right-10">
+          <AccountMenu isOpen={isOpen} setOpen={setOpen} />
+        </div>
       </div>
     </div>
   );

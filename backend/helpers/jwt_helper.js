@@ -40,11 +40,12 @@ module.exports = {
         if (err.name === "JsonWebTokenError") {
           return next(createError.Unauthorized());
         } else if (err.name === "TokenExpiredError") {
-          return next(createError.Forbidden("Session Expired, Login Again"));
+          return next(createError.Forbidden("Token Expired, Login again"));
         } else {
           return next(createError.Unauthorized());
         }
       }
+      
       req.payload = payload;
       next();
     });

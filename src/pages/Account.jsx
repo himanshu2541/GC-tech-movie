@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "flowbite-react";
 const Account = () => {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState();
@@ -16,10 +17,10 @@ const Account = () => {
         const response = await axiosPrivate.get("/user", {
           signal: controller.signal,
         });
-        console.log(response.data);
+        // console.log(response.data);
         isMounted && setUsers(response.data);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         if (!err.name === "AbortError") {
           navigate("/login", { state: { from: location }, replace: true });
         }
@@ -35,14 +36,33 @@ const Account = () => {
   return (
     <div className="w-full h-screen flex items-center justify-center">
       {users && (
-        <div>
-          <h1>{users.username}</h1>
-          <h1>{users.email}</h1>
-          <h1>
-            {users.role.map((role) => (
-              <p key={role}>{role}</p>
-            ))}
-          </h1>
+        <div className="flex flex-col w-1/2">
+          <span className="flex w-full gap-4 items-center">
+            <p>Name</p>
+            <span>:</span>
+            <p>{users.name}</p>
+          </span>
+          <span className="flex w-full gap-4 items-center">
+            <p>Email</p>
+            <span>:</span>
+            <p>{users.email}</p>
+          </span>
+          <span className="flex w-full gap-4 items-center">
+            <p>Roles</p>
+            <span>:</span>
+            <span className="flex gap-4">
+              {users.role.map((role) => (
+                <p key={role}>{role}</p>
+              ))}
+            </span>
+          </span>
+
+          <Button
+            className="w-fit min-w-[200px] mt-12 hover:bg-primary-red hover:text-white transition hover:border-primary-red"
+            onClick={() => navigate("/change-password")}
+          >
+            Change Password
+          </Button>
         </div>
       )}
     </div>

@@ -5,7 +5,7 @@ import { axiosPrivate } from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 
 const LOGOUT_URL = "refresh-token"; // delete request
-const AccountMenu = ({ isOpen }) => {
+const AccountMenu = ({ isOpen, setOpen }) => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
 
@@ -25,19 +25,54 @@ const AccountMenu = ({ isOpen }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-40 right-2 bg-white overflow-hidden top-4 text-sm">
+        <div className="absolute shadow-md w-36 right-6 top-4 text-xs">
           <div
             className="
             flex
-            flex-col
-            cursor-pointer
+            flex-col gap-1
+            z-40
           "
           >
             <MenuItem
-              onClick={handleLogout}
+              onClick={() => {
+                navigate("/me");
+                handleClose();
+              }}
+              label="Profile"
+              className={"text-primary-red"}
+            />
+
+            {/* get all users only access for admin */}
+            {auth && auth.roles.includes("admin") && (
+              <MenuItem
+                onClick={() => {
+                  navigate("/get-users");
+                }}
+                label={"All users"}
+                className={"text-primary-red"}
+              />
+            )}
+
+            <MenuItem
+              onClick={() => {
+                handleClose();
+              }}
+              label="Change Password"
+              className={"text-primary-red"}
+            />
+
+            <MenuItem
+              onClick={() => {
+                handleLogout();
+                handleClose();
+              }}
               label="Log out"
               className={"text-primary-red"}
             />
