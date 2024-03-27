@@ -14,8 +14,7 @@ const Hero = () => {
         />
         <div className="absolute w-1/2 top-[12%] p-6 md:p-10 z-20">
           <h1 className="text-5xl font-semibold ">
-            Transformers: Age of Extinction tftt Lorem ipsum dolor sit amet.
-            Lorem ipsum dolor sit amet.
+            Transformers: Age of Extinction
           </h1>
           <h2 className="mt-4 text-lg line-clamp-2 text-[#d6d5d4]">
             The Avengers is a 2012 American superhero film based on the Marvel
@@ -40,7 +39,7 @@ const Hero = () => {
 
       <div className="absolute w-full h-64 bottom-0 z-10 bg-gradient-to-b from-transparent to-primary-black" />
 
-      <div className="absolute w-full -bottom-5 z-20 px-8">
+      <div className="absolute w-full -bottom-12 z-20 px-8">
         <div className="relative overflow-visible">
           <MovieSections />
         </div>

@@ -11,6 +11,7 @@ import {
   ChangePassword,
   Unauthorized,
   Links,
+  MoviePage,
 } from "./pages";
 
 import Layout from "./layout/Layout";
@@ -25,6 +26,20 @@ const ROLES = {
 };
 
 const App = () => {
+  const movie = {
+    id: 1,
+    name: "The Avengers",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SY1000_SX677_AL_.jpg",
+    rating: { imdb: "8.0" },
+    year: "2012",
+    desc: "In Naples, where prostitutes can pay their rent, Angela is sentenced to a year in the workhouse when she tries to steal(while streetwalking) to pay for medicine for her dying mother. She escapes and is hidden by a circus, where she's a natural talent and meets Gino, a painter. When she breaks her ankle in a fall, her career ends. What can she and Gino do? He wants to go to Naples, but the law may still be looking for her, and Gino doesn't know about her past. Starving artist and a beauty with a secret: is there room in this world for them?",
+    genre: ["Action", "Adventure", "Sci-Fi"],
+    totalRatings: 123456,
+    cast: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+    director: "Joss Whedon",
+    runtime: "143",
+  };
   return (
     <Routes>
       {/* Public routes */}
@@ -43,11 +58,15 @@ const App = () => {
             <Route path="test" element={<FlowBiteCarousel />} />
             <Route
               path="/search/"
-              element={<PaginatedItems itemsPerPage={6} />}
+              element={<PaginatedItems itemsPerPage={10} />}
             />
             <Route path="/subscription" element={<Subscription />} />
             <Route path="/me" element={<Account />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route
+              path={`/movies/${movie.id}`}
+              element={<MoviePage movie={movie} />}
+            />
           </Route>
         </Route>
 

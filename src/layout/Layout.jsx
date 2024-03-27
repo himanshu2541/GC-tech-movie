@@ -6,17 +6,16 @@ const Layout = () => {
   return (
     <div>
       <div
-      className='h-[15rem] 
+        className="h-[5rem] 
       bg-gradient-to-b from-black to-transparent 
-      w-full text-white absolute top-0 z-10'
-    >
-      <Navbar />
-    </div>
-      
+      w-full text-white absolute top-0 z-10"
+      >
+        <Navbar />
+      </div>
+
       <Outlet />
       <Footer />
     </div>
-    
   );
 };
 

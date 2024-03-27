@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <div className="flex items-center justify-between pl-10 pr-16 pt-10 w-full ">
+    <div className="flex items-center justify-between pl-10 pr-16 pt-8 w-full ">
       <h1
         className="text-red-600 text-4xl font-bold cursor-pointer"
         onClick={() => navigate("/")}

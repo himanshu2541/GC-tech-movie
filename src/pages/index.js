@@ -8,7 +8,8 @@ import Subscription from "./Subscription";
 import Unauthorized from "./Unauthorized";
 import NotFound from "./NotFound";
 import ChangePassword from "./ChangePassword";
-import Test from "./Test"
+import Test from "./Test";
+import MoviePage from "./MoviePage";
 export {
   Login,
   Register,
@@ -20,5 +21,6 @@ export {
   Unauthorized,
   NotFound,
   ChangePassword,
-  Test
-}
+  Test,
+  MoviePage,
+};
