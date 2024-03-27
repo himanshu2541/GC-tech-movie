@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 const createError = require("http-errors");
+const { titleBodyCheckSchema } = require("../middlewares/validation");
 
 // Initialize MongoDB client
 const client = new MongoClient(process.env.MONGO_URI);
@@ -27,10 +28,17 @@ function adjustScoresAndSort(results) {
 
 // Search endpoint
 const fuzzySearchResults = async (request, response) => {
-  const { term } = request.query;
-  if (!term) {
-    throw createError.BadRequest("Search query is empty");
+  let result;
+  try {
+    result = await titleBodyCheckSchema.validateAsync(request.query);
+  } catch (error) {
+    if (error.isJoi === true) {
+      throw createError.UnprocessableEntity(error.details[0].message);
+    }
+    throw createError.BadRequest();
   }
+
+  const { title } = result;
 
   try {
     await client.connect();
@@ -42,7 +50,7 @@ const fuzzySearchResults = async (request, response) => {
         $search: {
           index: "autocomplete",
           autocomplete: {
-            query: `${term}`,
+            query: `${title}`,
             path: "title",
             fuzzy: {
               maxEdits: 2,
@@ -57,12 +65,12 @@ const fuzzySearchResults = async (request, response) => {
           customScore: {
             $switch: {
               branches: [
-                { case: { $eq: ["$title", term] }, then: 5 },
+                { case: { $eq: ["$title", title] }, then: 5 },
                 {
                   case: {
                     $regexMatch: {
                       input: "$title",
-                      regex: new RegExp(`^${term}`, "i"),
+                      regex: new RegExp(`^${title}`, "i"),
                     },
                   },
                   then: 0.2,
@@ -97,7 +105,7 @@ const fuzzySearchResults = async (request, response) => {
     response.status(200).send(adjustedResults);
   } catch (e) {
     console.error(e);
-    throw createError.InternalServerError();
+    response.status(500).send({ message: e.message });
   } finally {
     await client.close();
   }

@@ -1,12 +1,12 @@
 const express = require("express");
 
-const { verifyAccessToken } = require("../helpers/jwt_helper");
+// const { verifyAccessToken } = require("../helpers/jwt_helper");
 const semanticSearchResults = require("../controllers/plotSearchController");
 const fuzzySearchResults = require("../controllers/fuzzySearchController");
 
 const router = express.Router();
 
-router.route("/vector").post(verifyAccessToken, semanticSearchResults);
-router.route("/fuzzy").get(verifyAccessToken, fuzzySearchResults);
+router.route("/plot").get(semanticSearchResults);
+router.route("/title").get(fuzzySearchResults);
 
 module.exports = router;

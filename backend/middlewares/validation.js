@@ -49,6 +49,9 @@ const plotBodyCheckSchema = Joi.object({
   plot: Joi.string().required().label("Plot"),
 })
 
+const titleBodyCheckSchema = Joi.object({
+  title: Joi.string().required().label("Title"),
+})
 
 module.exports = {
   loginSchema,
@@ -56,5 +59,6 @@ module.exports = {
   refreshTokenSchema,
   updateUserSchema,
   deleteUserSchema,
-  plotBodyCheckSchema
+  plotBodyCheckSchema,
+  titleBodyCheckSchema
 };

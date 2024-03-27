@@ -4,8 +4,6 @@ const BASE_URL = "http://localhost:3000";
 
 export default axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
-  credentials: "include"
 });
 
 export const axiosPrivate = axios.create({

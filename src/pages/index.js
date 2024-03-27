@@ -1,7 +1,6 @@
 import Login from "./Login";
 import Register from "./Register";
 import Home from "./Home";
-import Links from "./Links";
 import Account from "./Account";
 import GetAllUsers from "./GetAllUsers";
 import Subscription from "./Subscription";
@@ -13,7 +12,6 @@ export {
   Login,
   Register,
   Home,
-  Links,
   Account,
   GetAllUsers,
   Subscription,

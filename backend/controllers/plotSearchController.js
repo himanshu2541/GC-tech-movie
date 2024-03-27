@@ -45,7 +45,7 @@ async function GetSimilarDocuments(embeddings) {
           queryVector: embeddings,
           path: "plot_embedding",
           numCandidates: 100,
-          limit: 5,
+          limit: 15,
           index: "moviesPlotIndex",
         },
       },
@@ -393,9 +393,9 @@ async function vectorSearch(plot) {
 
 const semanticSearchResults = expressAsyncHandler(async (req, res) => {
   let result;
-
+  // console.log(req.body)
   try {
-    result = await plotBodyCheckSchema.validateAsync(req.body);
+    result = await plotBodyCheckSchema.validateAsync(req.query);
   } catch (error) {
     if (error.isJoi === true) {
       throw createError.UnprocessableEntity(error.details[0].message);
