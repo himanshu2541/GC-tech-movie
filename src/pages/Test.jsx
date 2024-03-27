@@ -1,9 +1,9 @@
 import React from 'react'
-import FlowBiteCarousel from '../components/Carousel'
+import VideoPlayer from "../components/video/Videoplayer"
 
 const Test = () => {
   return (
-    <div><FlowBiteCarousel /></div>
+    <div><VideoPlayer/></div>
   )
 }
 

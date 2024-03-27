@@ -10,7 +10,7 @@ import {
   GetAllUsers,
   ChangePassword,
   Unauthorized,
-  Links,
+  Test,
   MoviePage,
 } from "./pages";
 
@@ -46,7 +46,7 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/links" element={<Links />} />
+      <Route path="/test" element={<Test />} />
 
       {/* Private Routes */}
       {/* Persist User to pages */}
