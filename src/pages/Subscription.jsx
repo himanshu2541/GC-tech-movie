@@ -44,21 +44,21 @@ const Subscription = () => {
       <div className="grid max-w-md gap-10 row-gap-5 lg:max-w-screen-lg sm:row-gap-10 lg:grid-cols-3 xl:max-w-screen-lg sm:mx-auto">
         <SubsCard
           title={"Basic"}
-          price={"$10"}
+          price={99}
           res={"Stream at 480p "}
-          content={"1 Device at a time"}
+         
         />
         <SubsCard
           title={"Standard"}
-          price={"$20"}
+          price={199}
           res={"Stream at 720p(HD)"}
-          content={"2 Devices at a time"}
+          
         />
         <SubsCard
           title={"Premium"}
-          price={"$30"}
+          price={499}
           res={"Stream at 1080p(Full HD)"}
-          content={"4 Devices at a time"}
+          
         />
       </div>
     </div>
