@@ -5,7 +5,7 @@ import MovieSections from "../components/home/MovieSections";
 
 const MoviePage = ({ movie }) => {
   return (
-    <div key={movie.id} className="h-[150vh] w-full relative select-none">
+    <div key={movie.id} className="h-[150vh] md:w-full relative select-none">
       <img
         className="w-full h-full object-cover blur-xl z-0 brightness-[0.15]"
         src={movie.image}

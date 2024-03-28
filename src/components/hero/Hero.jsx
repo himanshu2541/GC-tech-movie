@@ -4,7 +4,7 @@ import { GoStarFill } from "react-icons/go";
 import { IoPlay } from "react-icons/io5";
 const Hero = () => {
   return (
-    <div className="w-full h-[50rem] text-white relative select-none">
+    <div className="sm:w-full h-[50rem] text-white relative select-none">
       <div className="w-full h-full">
         <div className="absolute w-full h-inherit bg-gradient-to-r from-black z-10" />
         <img

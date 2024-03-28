@@ -4,7 +4,7 @@ function Card({ movie }) {
   return (
     <div
       key={movie.id}
-      className="w-48 rounded-lg overflow-hidden hover:scale-110 transition duration-700 relative group space-between hover:backdrop:blur-xl hover:z-40 hover:cursor-pointer shrink-0"
+      className="sm:w-48 rounded-lg overflow-hidden hover:scale-110 transition duration-700 relative group space-between hover:backdrop:blur-xl hover:z-40 hover:cursor-pointer shrink-0"
     >
       <img
         src={movie.image}
