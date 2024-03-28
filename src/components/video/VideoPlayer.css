@@ -1,9 +1,9 @@
    .Video-container {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
-    width: 76%;
-    height: 70%;
+    width: 900px;
+    height: 508px;
     border-radius: 5px;
        padding-bottom: 0%;
     overflow: hidden;
