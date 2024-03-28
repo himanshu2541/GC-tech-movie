@@ -26,7 +26,7 @@ const MovieSections = ({ title = "" }) => {
   };
   return (
     <div>
-      <h3 className="text-2xl ">{title}</h3>
+      <h3 className="text-2xl font-semibold px-2">{title}</h3>
       <div className="relative overflow-x-hidden">
         <div
           className="absolute left-0 bottom-0 bg-gradient-to-r from-primary-black to-transparent h-64 w-20 z-10 flex items-center justify-center cursor-pointer mb-8"

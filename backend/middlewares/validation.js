@@ -3,7 +3,7 @@ const Joi = require("joi");
 const PASSWORD_REGEX = new RegExp(
   "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()\\-_=+{};:'\",.<>?[\\]\\\\/]).{8,}$"
 );
-const NAME_REGEX = new RegExp("^[a-zA-Z0-9]+$");
+const NAME_REGEX = /^[a-zA-Z\s]+$/;
 
 const loginSchema = Joi.object({
   email: Joi.string().trim().email().lowercase().required(),
@@ -45,11 +45,20 @@ const refreshTokenSchema = Joi.object({
   refreshToken: Joi.string().required().label("Refresh Token"),
 });
 
+const plotBodyCheckSchema = Joi.object({
+  plot: Joi.string().required().label("Plot"),
+})
+
+const titleBodyCheckSchema = Joi.object({
+  title: Joi.string().required().label("Title"),
+})
 
 module.exports = {
   loginSchema,
   registerSchema,
   refreshTokenSchema,
   updateUserSchema,
-  deleteUserSchema
+  deleteUserSchema,
+  plotBodyCheckSchema,
+  titleBodyCheckSchema
 };

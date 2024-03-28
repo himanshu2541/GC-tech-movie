@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
+import DeleteAccount from "../components/account/DeleteAccount";
 const Account = () => {
   const axiosPrivate = useAxiosPrivate();
   const [users, setUsers] = useState();
@@ -63,6 +64,8 @@ const Account = () => {
           >
             Change Password
           </Button>
+
+          <DeleteAccount />
         </div>
       )}
     </div>
