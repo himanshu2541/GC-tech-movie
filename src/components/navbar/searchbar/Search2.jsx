@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./SearchBar.css";
 import axios from "../../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const TITLE_SEARCH_URL = "/search/title";
 const PLOT_SEARCH_URL = "/search/plot";
@@ -15,6 +16,7 @@ const SearchBar = () => {
   const debounceTimerRef = useRef(null); // Ref for debounce timer
   const [isTitle, setIsTitle] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleArrowKeyPress = (event) => {
@@ -59,11 +61,6 @@ const SearchBar = () => {
   }, [query]);
 
 
-  const handleTitleSearch = async (inputValue) => {
-    
-  }
-  
-
 
 
   const handleChange = async (event) => {
@@ -82,7 +79,9 @@ const SearchBar = () => {
       }
       try {
         const response = await axios.get(
-          `${isTitle ? TITLE_SEARCH_URL: PLOT_SEARCH_URL}/?${isTitle ? "title": "plot"}=${inputValue}`
+          `${isTitle ? TITLE_SEARCH_URL: PLOT_SEARCH_URL}`, {
+            params: { query: inputValue },
+          }
         );
         setSuggestions(response.data);
         setShowSuggestions(true);
@@ -104,6 +103,8 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     console.log("Searching for:", query);
+    setIsDropdownOpen(false);
+    navigate(`/search?title=${isTitle}&query=${query}`);
   };
 
   const handleKeyDown = (event) => {
@@ -136,7 +137,7 @@ const SearchBar = () => {
           {isTitle ? "Title" : "Plot"}
         </button>
         <div
-          className={`absolute top-12 bg-white text-black py-2 rounded-md z-[100]  ${isDropdownOpen ? "flex" : "hidden"}`}
+          className={`absolute top-12 bg-white text-black py-2 rounded-md z-[2000]  ${isDropdownOpen ? "flex" : "hidden"}`}
         >
           <span
             className="w-full cursor-pointer hover:bg-slate-200 px-6 py-2 select-none"
