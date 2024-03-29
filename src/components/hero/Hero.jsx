@@ -13,7 +13,7 @@ const Hero = () => {
           src={`/register.jpg`}
           alt="{movie background}"
         />
-        <div className="absolute w-1/2 top-[12%] p-6 md:p-10 z-20">
+        <div className="absolute w-1/2 top-[12%] p-6 md:p-10 z-5">
           <h1 className="text-5xl font-semibold ">
             Transformers: Age of Extinction
           </h1>

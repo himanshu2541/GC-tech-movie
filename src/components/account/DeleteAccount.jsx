@@ -3,14 +3,11 @@ import React from "react";
 
 const DELETE_USER_URL = "/user";
 
-
-const DeleteAccount = () => {
-
-  
+const DeleteAccount = ({className}) => {
   return (
-    <>
+    <div className={className}>
       <Button label="Delete Account" small onClick={() => {}} />
-    </>
+    </div>
   );
 };
 
