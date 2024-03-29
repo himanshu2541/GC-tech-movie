@@ -12,7 +12,12 @@ const SubsCard = ({ title, price, res }) => {
     await refresh();
     console.log(price);
 
-    const { data: { Key } } = await axios.get("http://localhost:3000/payment/getkey");
+    const {data:{Key}} = await axios.get("http://localhost:3000/payment/getkey").then((res)=>{
+      console.log(res);
+      if(res.status!=200) alert("Something Went Wrong!!! Please Try again.")
+      return res;
+    })
+
 
     console.log(Key);
     const { data: { id } } = await axios.post("http://localhost:3000/payment/create/order-id", {
@@ -126,7 +131,6 @@ const SubsCard = ({ title, price, res }) => {
           <div>/ mo</div>
         </div>
         <div className="mt-4 space-y-3">
-          {/* <div className="text-gray-700">Resolution</div> */}
           <div className="font-semibold">{res}</div>
         </div>
         <div className="w-full mt-8 px-2">

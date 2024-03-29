@@ -16,6 +16,15 @@ const isSessionExists = require("../helpers/isSessionExists");
 // Login user
 // post request with email and password
 // public access
+
+const role2lblMap = {
+  "tier4":"T4",
+  "tier3":"T3",
+  "tier2":"T2",
+  "tier1":"T1",
+  "admin":"A"
+}
+
 const loginUser = asyncHandler(async (req, res) => {
   // validating the body
   let result;
@@ -270,7 +279,7 @@ const userProfile = asyncHandler(async (req, res) => {
   res.status(200).json({
     name: name,
     email: email,
-    role: role.Role,
+    role: role.Role
   });
 });
 

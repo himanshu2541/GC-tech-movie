@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./SearchBar.css";
 import axios from "../../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const TITLE_SEARCH_URL = "/search/title";
 const PLOT_SEARCH_URL = "/search/plot";
@@ -15,6 +16,7 @@ const SearchBar = () => {
   const debounceTimerRef = useRef(null); // Ref for debounce timer
   const [isTitle, setIsTitle] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleArrowKeyPress = (event) => {
@@ -58,13 +60,12 @@ const SearchBar = () => {
     }
   }, [query]);
 
-
-  const handleTitleSearch = async (inputValue) => {
-    
-  }
-  
+<<<<<<< HEAD
 
 
+=======
+  const handleTitleSearch = async (inputValue) => {};
+>>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
 
   const handleChange = async (event) => {
     const inputValue = event.target.value;
@@ -82,13 +83,22 @@ const SearchBar = () => {
       }
       try {
         const response = await axios.get(
-          `${isTitle ? TITLE_SEARCH_URL: PLOT_SEARCH_URL}/?${isTitle ? "title": "plot"}=${inputValue}`
+<<<<<<< HEAD
+          `${isTitle ? TITLE_SEARCH_URL: PLOT_SEARCH_URL}`, {
+            params: { query: inputValue },
+          }
+=======
+          `${isTitle ? TITLE_SEARCH_URL : PLOT_SEARCH_URL}/?${isTitle ? "title" : "plot"}=${inputValue}`
+>>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
         );
         setSuggestions(response.data);
         setShowSuggestions(true);
         setHighlightedIndex(-1);
       } catch (error) {
-        console.error("Error fetching autocomplete suggestions:", error.message);
+        console.error(
+          "Error fetching autocomplete suggestions:",
+          error.message
+        );
       }
     }, 300); // Adjust the delay as needed
   };
@@ -104,6 +114,8 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     console.log("Searching for:", query);
+    setIsDropdownOpen(false);
+    navigate(`/search?title=${isTitle}&query=${query}`);
   };
 
   const handleKeyDown = (event) => {
@@ -126,6 +138,7 @@ const SearchBar = () => {
 
   return (
     <div className="search-container flex gap-4">
+<<<<<<< HEAD
       <div className={`relative`}>
         <button
           onClick={() => {
@@ -136,7 +149,7 @@ const SearchBar = () => {
           {isTitle ? "Title" : "Plot"}
         </button>
         <div
-          className={`absolute top-12 bg-white text-black py-2 rounded-md z-[100]  ${isDropdownOpen ? "flex" : "hidden"}`}
+          className={`absolute top-12 bg-white text-black py-2 rounded-md z-[2000]  ${isDropdownOpen ? "flex" : "hidden"}`}
         >
           <span
             className="w-full cursor-pointer hover:bg-slate-200 px-6 py-2 select-none"
@@ -151,6 +164,8 @@ const SearchBar = () => {
       </div>
 
 
+=======
+>>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
       <div className="search-center">
         <div className="relative">
           <div className="absolute left-3 top-1/2 translate-y-[-50%]">
@@ -177,7 +192,7 @@ const SearchBar = () => {
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
             placeholder="Search for movies..."
-            className=" min-w-[400px] w-full border-[1px] border-gray-600 px-4 py-2 pl-12 rounded-md outline-none bg-black/15"
+            className=" min-w-[400px] w-full border-l-[1px] border-b-[1px] border-gray-400 px-4 py-2 pl-12 rounded-md outline-none bg-black/15"
             ref={inputRef}
           />
         </div>
@@ -185,6 +200,29 @@ const SearchBar = () => {
         <button className="search-button" onClick={handleSearch}>
           Search
         </button>
+        <div className={`relative`}>
+          <button
+            onClick={() => {
+              setIsDropdownOpen(!isDropdownOpen);
+            }}
+            className="border-l-[1px] border-b-[1px] border-gray-400 px-4 py-2 rounded-md bg-black/15"
+          >
+            {isTitle ? "Title" : "Plot"}
+          </button>
+          <div
+            className={`absolute top-12 bg-white text-black py-2 rounded-md z-[100]  ${isDropdownOpen ? "flex" : "hidden"}`}
+          >
+            <span
+              className="w-full cursor-pointer px-6 py-2 select-none "
+              onClick={() => {
+                setIsTitle((prev) => !prev);
+                setIsDropdownOpen(false);
+              }}
+            >
+              {!isTitle ? "Title" : "Plot"}
+            </span>
+          </div>
+        </div>
         {showSuggestions && (
           <ul className="suggestions-list text-black" ref={suggestionsRef}>
             {suggestions.map((movie, index) => (

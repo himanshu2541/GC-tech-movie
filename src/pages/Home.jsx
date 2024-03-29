@@ -1,17 +1,33 @@
 import React from "react";
 import { Hero, MovieSections } from "../components";
-// import CardsTemplateExample from '../components/hero/CardsTemplateExample';
+import { useMovies } from "../hooks/useMovies";
 
 const Home = () => {
+  const { movieData, isLoading, movieGenres, errorMessage } = useMovies();
+
+  // console.log(movieGenres);
   return (
-    <div>
-      <Hero />
-      <div className="mt-24 px-8">
-        <MovieSections title="Top Movies" />
-        <MovieSections title="Top Shows" />
-        <MovieSections title="Most Liked" />
-      </div>
-    </div>
+    !isLoading && (
+      <>
+        <Hero />
+        {errorMessage ? (
+          <p>{errorMessage}</p>
+        ) : (
+          <div className="overflow-x-hidden flex flex-col w-full px-8 py-2 mt-12">
+            {movieData &&
+              movieGenres.map((genre, index) => (
+                <MovieSections
+                  key={index}
+                  title={`Top ${genre}`}
+                  movieData={movieData.filter((movie) =>
+                    genre.includes(movie.genres)
+                  )}
+                />
+              ))}
+          </div>
+        )}
+      </>
+    )
   );
 };
 
