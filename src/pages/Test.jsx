@@ -3,7 +3,7 @@ import VideoPlayer from "../components/video/Videoplayer"
 
 const Test = () => {
   return (
-    <div><VideoPlayer/></div>
+    <div className = "w-full h-full"><VideoPlayer/></div>
   )
 }
 

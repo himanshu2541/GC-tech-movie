@@ -1,15 +1,17 @@
 import React ,{useEffect} from 'react';
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player/dist/controls.css';
-import './VideoPlayer.css';
+// import './VideoPlayer.css';
 
 const VideoPlayer = () => {
   useEffect(() => {
     async function init() {
-    //   const manifestUri = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-    //   const manifestUri = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
-    //   const manifestUri = 'https://dash.akamaized.net/dash264/TestCasesIOP33/adapatationSetSwitching/5/manifest.mpd';
-      const manifestUri = 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+      // const manifestUri = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
+      // const manifestUri = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
+      // const manifestUri = 'https://dash.akamaized.net/dash264/TestCasesIOP33/adapatationSetSwitching/5/manifest.mpd';
+    const manifestUri = 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd';
+    // const manifestUri = Videoo;
+
 
       try {
         const video = document.getElementById('video');
@@ -57,18 +59,18 @@ const VideoPlayer = () => {
   }, []);
 
 return (
-    <div className='bg-black'>  
-    <div className='Video-container'>
+    <div className='bg-black w-full h-full mx-auto'>  
+    <div className='Video-container w-full h-full mx-auto'>
         <ShakaPlayer
-            // src="https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd"
-            // src="https://dash.akamaized.net/dash264/TestCasesHD/2b/qualcomm/1/MultiResMPEG2.mpd"
-        //   src="https://dash.akamaized.net/dash264/TestCasesIOP33/adapatationSetSwitching/5/manifest.mpd"
           src="https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
+               // src="https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd"
+            // src="https://dash.akamaized.net/dash264/TestCasesHD/2b/qualcomm/1/MultiResMPEG2.mpd"
+          // src="https://dash.akamaized.net/dash264/TestCasesIOP33/adapatationSetSwitching/5/manifest.mpd"
           // src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.mpd"
             autoPlay
             id="video"
-            style={{width: "100%", height:"100%"}}
-                    castAndroidReceiverCompatible={true}
+           className= "w-full h-full"
+            castAndroidReceiverCompatible={true}
         />
     </div>
    </div>

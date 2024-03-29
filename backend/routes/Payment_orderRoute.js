@@ -15,7 +15,15 @@ let instance = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-router.post("/create/order-id", verifyAccessToken, async (req, res) => {
+router.get("/getkey",(req,res)=>{
+  console.log("endpoint hit");
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(200).json({
+    "Key":process.env.RAZORPAY_KEY_ID,
+  })
+})
+
+router.post("/create/order-id",  async (req, res) => {
   try {
     console.log("Create orderID request", req.body);
 
@@ -27,6 +35,7 @@ router.post("/create/order-id", verifyAccessToken, async (req, res) => {
     };
 
     const order = await instance.orders.create(options);
+    res.status(200).json({ id: order["id"] });
 
     console.log(order);
     res.send("orderID: " + order.id);
@@ -34,7 +43,7 @@ router.post("/create/order-id", verifyAccessToken, async (req, res) => {
     if (error.isJoi === true) {
       throw createError.UnprocessableEntity(error.details[0].message);
     }
-    throw createError.BadRequest();
+    // throw createError.BadRequest();
   }
 });
 

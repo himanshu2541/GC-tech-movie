@@ -30,6 +30,7 @@ const ROLES = {
 
 const App = () => {
   return (
+    <div className="app w-screen h-screen mx-auto">
     <Routes>
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
@@ -64,6 +65,7 @@ const App = () => {
       {/* catch all unmatched routes */}
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </div>
   );
 };
 
