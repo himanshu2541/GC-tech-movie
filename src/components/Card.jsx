@@ -1,33 +1,17 @@
 import React from "react";
 import { GoStarFill } from "react-icons/go";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-function Card({ movie }) {
-  const navigate = useNavigate();
-
-=======
 import { useNavigate } from "react-router";
 function Card({ movie }) {
   const navigate = useNavigate();
   const clickHandler = ()=>{
-    navigate(`/movies/${movie.id}`);
+    navigate(`/movies/${movie._id}`);
   }
->>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
   return (
     
     <div
-<<<<<<< HEAD
-      key={movie._id}
-      className="w-48 rounded-lg overflow-hidden hover:scale-110 transition duration-700 relative group space-between hover:backdrop:blur-xl hover:z-40 hover:cursor-pointer shrink-0"
-      onClick={() => {
-        window.scrollTo(0, 0, { behavior: "smooth" });
-        navigate(`/movies/${movie._id}`);
-      }}
-=======
       key={movie.id}
       className="sm:w-48 rounded-lg overflow-hidden hover:scale-110 transition duration-700 relative group space-between hover:backdrop:blur-xl hover:z-40 hover:cursor-pointer shrink-0"
       onClick = {clickHandler}
->>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
     >
       <img
         src={movie.poster}

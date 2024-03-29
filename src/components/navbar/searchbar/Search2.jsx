@@ -60,12 +60,7 @@ const SearchBar = () => {
     }
   }, [query]);
 
-<<<<<<< HEAD
-
-
-=======
   const handleTitleSearch = async (inputValue) => {};
->>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
 
   const handleChange = async (event) => {
     const inputValue = event.target.value;
@@ -83,13 +78,7 @@ const SearchBar = () => {
       }
       try {
         const response = await axios.get(
-<<<<<<< HEAD
-          `${isTitle ? TITLE_SEARCH_URL: PLOT_SEARCH_URL}`, {
-            params: { query: inputValue },
-          }
-=======
           `${isTitle ? TITLE_SEARCH_URL : PLOT_SEARCH_URL}/?${isTitle ? "title" : "plot"}=${inputValue}`
->>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
         );
         setSuggestions(response.data);
         setShowSuggestions(true);
@@ -138,34 +127,6 @@ const SearchBar = () => {
 
   return (
     <div className="search-container flex gap-4">
-<<<<<<< HEAD
-      <div className={`relative`}>
-        <button
-          onClick={() => {
-            setIsDropdownOpen(!isDropdownOpen);
-          }}
-          className="border-[1px] border-gray-500 px-4 py-2 rounded-md"
-        >
-          {isTitle ? "Title" : "Plot"}
-        </button>
-        <div
-          className={`absolute top-12 bg-white text-black py-2 rounded-md z-[2000]  ${isDropdownOpen ? "flex" : "hidden"}`}
-        >
-          <span
-            className="w-full cursor-pointer hover:bg-slate-200 px-6 py-2 select-none"
-            onClick={() => {
-              setIsTitle((prev) => !prev);
-              setIsDropdownOpen(false);
-            }}
-          >
-            {!isTitle ? "Title" : "Plot"}
-          </span>
-        </div>
-      </div>
-
-
-=======
->>>>>>> 0b4d7fb469053c0d5cfba3e5b12ff9ca2a812690
       <div className="search-center">
         <div className="relative">
           <div className="absolute left-3 top-1/2 translate-y-[-50%]">
