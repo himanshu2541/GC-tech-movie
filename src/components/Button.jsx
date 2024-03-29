@@ -14,7 +14,7 @@ const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`relative disabled:opacity-70 disbaled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full 
+      className={`relative disabled:opacity-70 disbaled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full p-4
     ${
       outline
         ? "bg-white border-black text-black"

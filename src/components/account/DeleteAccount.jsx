@@ -5,7 +5,7 @@ const DELETE_USER_URL = "/user";
 
 const DeleteAccount = ({className}) => {
   return (
-    <div className={className}>
+    <div >
       <Button label="Delete Account" small onClick={() => {}} />
     </div>
   );
