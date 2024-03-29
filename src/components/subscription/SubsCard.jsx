@@ -5,7 +5,12 @@ const SubsCard = ({ title, price, res }) => {
   const checkouthandler = async ()=>{
     console.log(price)
 
-    const {data:{Key}} = await axios.get("http://localhost:3000/payment/getkey")
+    const {data:{Key}} = await axios.get("http://localhost:3000/payment/getkey").then((res)=>{
+      console.log(res);
+      if(res.status!=200) alert("Something Went Wrong!!! Please Try again.")
+      return res;
+    })
+
 
     console.log(Key);
     const {data:{id}} = await axios.post("http://localhost:3000/payment/create/order-id",{

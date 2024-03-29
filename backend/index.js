@@ -12,9 +12,8 @@ const cookieParser = require("cookie-parser");
 const corsOptions = require("./config/corsOptions");
 const paymentRoute = require("./routes/Payment_orderRoute");
 const searchRoute = require("./routes/searchRoute");
-
 const subscriptionRoute = require("./routes/subscriptionRoute");
-
+const movieRoute = require("./routes/movieRoute");
 const port = process.env.PORT || 5000;
 connectDb();
 
@@ -33,7 +32,7 @@ app.use("/refresh-token", refreshRoute);
 app.use("/subscription", subscriptionRoute);
 app.use("/payment", paymentRoute);
 app.use("/search", searchRoute);
-
+app.use("/movies", movieRoute);
 
 app.all("*", async (req, res, next) => {
   next(createError.NotFound(`Can't find ${req.originalUrl} on this server!`));

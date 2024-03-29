@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const createError = require("http-errors");
-const { titleBodyCheckSchema } = require("../middlewares/validation");
-
+const { movieQueryCheckSchema } = require("../middlewares/validation");
+const expressAsyncHandler = require("express-async-handler");
 // Initialize MongoDB client
 const client = new MongoClient(process.env.MONGO_URI);
 
@@ -27,10 +27,10 @@ function adjustScoresAndSort(results) {
 }
 
 // Search endpoint
-const fuzzySearchResults = async (request, response) => {
+const fuzzySearchResults = expressAsyncHandler(async (request, response) => {
   let result;
   try {
-    result = await titleBodyCheckSchema.validateAsync(request.query);
+    result = await movieQueryCheckSchema.validateAsync(request.query);
   } catch (error) {
     if (error.isJoi === true) {
       throw createError.UnprocessableEntity(error.details[0].message);
@@ -38,7 +38,14 @@ const fuzzySearchResults = async (request, response) => {
     throw createError.BadRequest();
   }
 
-  const { title } = result;
+  const title = result.query;
+  let { limit } = request.query;
+
+  limit = Number(limit);
+  if(limit==="" || limit === undefined || isNaN(limit)) {
+    limit = 25
+  }
+
 
   try {
     await client.connect();
@@ -88,15 +95,19 @@ const fuzzySearchResults = async (request, response) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           title: 1,
-          score: 1,
-          imdbRating: "$imdb.rating" || 0,
+          poster: 1,
+          genres: 1,
+          plot: 1,
           year: 1,
+          imdbRating: "$imdb.rating" || 0,
+          score: 1,
         },
       },
+
       { $sort: { score: -1 } },
-      { $limit: 40 },
+      { $limit: limit },
     ];
 
     const result = await coll.aggregate(agg).toArray();
@@ -104,11 +115,11 @@ const fuzzySearchResults = async (request, response) => {
 
     response.status(200).send(adjustedResults);
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     response.status(500).send({ message: e.message });
   } finally {
     await client.close();
   }
-};
+});
 
 module.exports = fuzzySearchResults;

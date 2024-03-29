@@ -45,12 +45,9 @@ const refreshTokenSchema = Joi.object({
   refreshToken: Joi.string().required().label("Refresh Token"),
 });
 
-const plotBodyCheckSchema = Joi.object({
-  plot: Joi.string().required().label("Plot"),
-})
-
-const titleBodyCheckSchema = Joi.object({
-  title: Joi.string().required().label("Title"),
+const movieQueryCheckSchema = Joi.object({
+  query: Joi.string().label("query").default(""),
+  limit: Joi.string().allow("").label("limit").default(25),
 })
 
 module.exports = {
@@ -59,6 +56,5 @@ module.exports = {
   refreshTokenSchema,
   updateUserSchema,
   deleteUserSchema,
-  plotBodyCheckSchema,
-  titleBodyCheckSchema
+  movieQueryCheckSchema
 };

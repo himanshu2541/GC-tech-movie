@@ -1,6 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 const axios = require("axios");
-const { plotBodyCheckSchema } = require("../middlewares/validation");
+const { movieQueryCheckSchema } = require("../middlewares/validation");
 const createError = require("http-errors");
 const expressAsyncHandler = require("express-async-handler");
 
@@ -27,7 +27,7 @@ const getEmbeddingOpenAI = expressAsyncHandler(async (plot) => {
   return response.data.data[0].embedding;
 });
 
-async function GetSimilarDocuments(embeddings) {
+const GetSimilarDocuments = expressAsyncHandler(async (embeddings, limit) => {
   const client = new MongoClient(process.env.MONGO_URI);
 
   try {
@@ -45,15 +45,19 @@ async function GetSimilarDocuments(embeddings) {
           queryVector: embeddings,
           path: "plot_embedding",
           numCandidates: 100,
-          limit: 15,
+          limit: limit,
           index: "moviesPlotIndex",
         },
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           title: 1,
+          poster: 1,
+          genres: 1,
           plot: 1,
+          year: 1,
+          imdbRating: "$imdb.rating" || 0,
         },
       },
     ];
@@ -67,9 +71,9 @@ async function GetSimilarDocuments(embeddings) {
   } finally {
     await client.close();
   }
-}
+});
 
-async function vectorSearch(plot) {
+const vectorSearch = expressAsyncHandler(async (plot, limit) => {
   try {
     //const embeddings = await getEmbeddingOpenAI(plot);
     const embeddings = [
@@ -382,30 +386,35 @@ async function vectorSearch(plot) {
       -0.011982721, -0.016967745, -0.0060913274, -0.007130985, -0.013109017,
       -0.009710136,
     ];
-    const documents = await GetSimilarDocuments(embeddings);
+    const documents = await GetSimilarDocuments(embeddings, limit);
     //await documents.forEach((documents) => console.dir(JSON.stringify(documents)));
     return documents;
   } catch (err) {
-    console.log(err)
+    console.log(err);
     throw createError.InternalServerError();
   }
-}
+});
 
 const semanticSearchResults = expressAsyncHandler(async (req, res) => {
   let result;
-  // console.log(req.body)
   try {
-    result = await plotBodyCheckSchema.validateAsync(req.query);
+    result = await movieQueryCheckSchema.validateAsync(req.query);
   } catch (error) {
     if (error.isJoi === true) {
       throw createError.UnprocessableEntity(error.details[0].message);
     }
     throw createError.BadRequest();
   }
+  const plot = result.query;
+  let { limit } = req.query;
 
-  const { plot } = result;
+  limit = Number(limit);
+  if (limit === "" || limit === undefined || isNaN(limit)) {
+    limit = 25;
+  }
 
-  const documents = await vectorSearch(plot);
+
+  const documents = await vectorSearch(plot, limit);
 
   if (!documents) {
     throw createError.NotFound();
@@ -414,5 +423,4 @@ const semanticSearchResults = expressAsyncHandler(async (req, res) => {
   res.status(200).send(documents);
 });
 
-
-module.exports = semanticSearchResults
+module.exports = semanticSearchResults;

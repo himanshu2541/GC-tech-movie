@@ -64,7 +64,7 @@ const Account = () => {
     let isMounted = true;
     const controller = new AbortController();
     const getUser = async () => {
-      try {
+    try {
         const response = await axiosPrivate.get("/user", {
           signal: controller.signal,
         });

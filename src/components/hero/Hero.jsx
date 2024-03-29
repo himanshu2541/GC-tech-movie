@@ -2,17 +2,21 @@ import React from "react";
 import MovieSections from "../home/MovieSections";
 import { GoStarFill } from "react-icons/go";
 import { IoPlay } from "react-icons/io5";
+import { useMovies } from "../../hooks/useMovies";
+import { Link } from "react-router-dom";
 const Hero = () => {
+  const { movieData } = useMovies();
+
   return (
-    <div className="w-full h-[50rem] text-white relative select-none">
+    <div className="sm:w-full h-[50rem] text-white relative select-none">
       <div className="w-full h-full">
         <div className="absolute w-full h-inherit bg-gradient-to-r from-black z-10" />
         <img
-          className="w-full h-full object-cover blur-sm z-0 brightness-[0.35]"
+          className="w-full h-full object-cover blur-sm z-[-1] brightness-[0.35]"
           src={`/register.jpg`}
           alt="{movie background}"
         />
-        <div className="absolute w-1/2 top-[12%] p-6 md:p-10 z-5">
+        <div className="absolute w-1/2 top-[12%] p-6 md:p-10">
           <h1 className="text-5xl font-semibold ">
             Transformers: Age of Extinction
           </h1>
@@ -22,9 +26,9 @@ const Hero = () => {
             and
           </h2>
           <div className="my-4 text-lg">
-            <button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
+            <Link to ="/test"><button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
               <IoPlay /> Play
-            </button>
+            </button></Link>
           </div>
           <div>
             <p className=" text-md mb-2">Released : 2008</p>
@@ -41,7 +45,12 @@ const Hero = () => {
 
       <div className="absolute w-full -bottom-12 z-20 px-8">
         <div className="relative overflow-visible">
-          <MovieSections />
+          {movieData && (
+            <MovieSections
+              movieData={movieData.filter((movie) => movie.imdbRating >= "8.5")}
+              title="Top Rated"
+            />
+          )}
         </div>
       </div>
     </div>
