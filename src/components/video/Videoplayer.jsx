@@ -1,7 +1,7 @@
 import React ,{useEffect} from 'react';
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player/dist/controls.css';
-import './VideoPlayer.css';
+// import './VideoPlayer.css';
 
 const VideoPlayer = () => {
   useEffect(() => {
@@ -57,8 +57,8 @@ const VideoPlayer = () => {
   }, []);
 
 return (
-    <div className='bg-black'>  
-    <div className='Video-container'>
+    <div className='bg-black w-full h-full mx-auto'>  
+    <div className='Video-container w-full h-full mx-auto'>
         <ShakaPlayer
             // src="https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd"
             // src="https://dash.akamaized.net/dash264/TestCasesHD/2b/qualcomm/1/MultiResMPEG2.mpd"
@@ -67,8 +67,8 @@ return (
           // src="https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.mpd"
             autoPlay
             id="video"
-            style={{width: "100%", height:"100%"}}
-                    castAndroidReceiverCompatible={true}
+           className= "w-full h-full"
+            castAndroidReceiverCompatible={true}
         />
     </div>
    </div>

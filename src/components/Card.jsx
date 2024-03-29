@@ -1,10 +1,17 @@
 import React from "react";
 import { GoStarFill } from "react-icons/go";
+import { useNavigate } from "react-router";
 function Card({ movie }) {
+  const navigate = useNavigate();
+  const clickHandler = ()=>{
+    navigate(`/movies/${movie.id}`);
+  }
   return (
+    
     <div
       key={movie.id}
       className="sm:w-48 rounded-lg overflow-hidden hover:scale-110 transition duration-700 relative group space-between hover:backdrop:blur-xl hover:z-40 hover:cursor-pointer shrink-0"
+      onClick = {clickHandler}
     >
       <img
         src={movie.image}

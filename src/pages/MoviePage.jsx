@@ -2,6 +2,7 @@ import React from "react";
 import { IoPlay } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
 import MovieSections from "../components/home/MovieSections";
+import { Link } from "react-router-dom";
 
 const MoviePage = ({ movie }) => {
   return (
@@ -41,13 +42,13 @@ const MoviePage = ({ movie }) => {
                 <p className="mr-10 line-clamp-6">{movie.desc}</p>
               </div>
               <div className="space-y-4 my-6">
-                <button
+                <Link to = "/test"><button
                   className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4
                 font-semibold rounded-md hover:bg-primary-red hover:text-white
-                duration-300"
+                duration-300" 
                 >
                   <IoPlay /> Play
-                </button>
+                </button></Link>
               </div>
               <div>
                 <h2 className="text-2xl font-semibold mb-5">Details</h2>

@@ -2,6 +2,7 @@ import React from "react";
 import MovieSections from "../home/MovieSections";
 import { GoStarFill } from "react-icons/go";
 import { IoPlay } from "react-icons/io5";
+import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <div className="sm:w-full h-[50rem] text-white relative select-none">
@@ -22,9 +23,9 @@ const Hero = () => {
             and
           </h2>
           <div className="my-4 text-lg">
-            <button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
+            <Link to ="/test"><button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
               <IoPlay /> Play
-            </button>
+            </button></Link>
           </div>
           <div>
             <p className=" text-md mb-2">Released : 2008</p>
