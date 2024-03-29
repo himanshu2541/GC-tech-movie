@@ -13,7 +13,6 @@ const SubsCard = ({ title, price, res, content }) => {
           <div>/ mo</div>
         </div>
         <div className="mt-4 space-y-3">
-          {/* <div className="text-gray-700">Resolution</div> */}
           <div className="font-semibold">{res}</div>
           <div className="font-semibold">{content}</div>
         </div>
