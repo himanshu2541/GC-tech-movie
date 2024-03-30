@@ -1,9 +1,19 @@
 import React ,{useEffect} from 'react';
 import ShakaPlayer from 'shaka-player-react';
 import 'shaka-player/dist/controls.css';
+import {Button} from "flowbite-react";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import {useNavigate} from "react-router-dom";
 // import './VideoPlayer.css';
 
-const VideoPlayer = () => {
+const backButton = ({className}) => {
+  return (
+    <Button className={className}/>
+  )
+}
+
+const VideoPlayer = ({id}) => {
+  const navigate = useNavigate();
   useEffect(() => {
     async function init() {
       // const manifestUri = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
@@ -35,7 +45,7 @@ const VideoPlayer = () => {
     function onPlayerErrorEvent(errorEvent) {
       onPlayerError(errorEvent.detail);
     }
-    
+
     function onUIErrorEvent(errorEvent) {
       onPlayerError(errorEvent.detail);
     }
@@ -59,8 +69,11 @@ const VideoPlayer = () => {
   }, []);
 
 return (
-    <div className='bg-black w-full h-full mx-auto'>  
-    <div className='Video-container w-full h-full mx-auto'>
+    <div className='bg-black w-full h-full mx-auto'>
+      <div className='Video-container w-full h-full mx-auto'>
+        <button className="absolute w-[5%] h-[10%] z-50 ml-6 mt-2" onClick={() => navigate("/")}>
+          <IoMdArrowRoundBack size={32}/>
+        </button>
         <ShakaPlayer
           src="https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
                // src="https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd"
@@ -72,9 +85,9 @@ return (
            className= "w-full h-full"
             castAndroidReceiverCompatible={true}
         />
+      </div>
     </div>
-   </div>
-);
+  );
 };
 
 export default VideoPlayer;

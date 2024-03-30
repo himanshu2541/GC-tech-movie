@@ -4,13 +4,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 import DeleteAccount from "../components/account/DeleteAccount";
 import { sha256 } from "js-sha256";
-import useRefreshToken from "../hooks/useRefreshToken";
+
+const getRoleLabel = (role) => {
+  switch (role) {
+    case "tier4": return "Free"
+    case "tier3": return "Basic"
+    case "tier2": return "Standard"
+    case "tier1": return "Premium"
+  }
+}
+
 const UserCard = ({ user }) => {
+  let userRoles = user.role
   const IMG_URL =
     "https://gravatar.com/avatar/" +
     sha256(String(user.email).trim().toLowerCase()) +
     "?d=robohash&s=256";
-
+  if (user.role.length > 1){
+    userRoles = user.role.filter((item) => getRoleLabel(item) !== "Free")
+  }
   return (
     <div className="p-6 font-lg text-white flex flex-col items-center justify-center bg-gray-800 rounded-lg">
       <div className=" flex justify-center items-center">
@@ -21,23 +33,27 @@ const UserCard = ({ user }) => {
         />
       </div>
 
-      <div className="mt-2">
-        <p className="text-4xl font-bold mt-2">{user.name}</p>
+        <div className="mt-2">
+          <p className="text-4xl font-bold mt-2">{user.name}</p>
+        </div>
+        <div>
+      <p className="text-gray-300 ">{user.email}</p>
       </div>
-      <div>
-        <p className="text-gray-300 ">{user.email}</p>
-      </div>
-      <div className="flex item-center justify-center">
-        <p className="text-lg font-medium mt-4">Active Plan:</p>
-        <div className="flex flex-wrap gap-2 mt-4">
-          {user.role.map((role) => (
-            <span key={role} className="px-3  text-lg font-semibold">
-              {role}
-            </span>
-          ))}
+        <div className = "flex item-center justify-center">
+          <p className="text-lg font-medium mt-4">Active Plan:</p>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {userRoles.map((role) => (
+              <span
+                key={role}
+                className="px-3 text-lg font-semibold"
+              >
+                {getRoleLabel(role)}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
   );
 };
 
