@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { IoPlay } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
 import MovieSections from "../components/home/MovieSections";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../api/axios";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
-import { Link } from "react-router-dom";
 
 const GET_MOVIE = "/movies";
 
@@ -17,6 +16,8 @@ const MoviePage = () => {
   const [similarMovieData, setSimilarMovieData] = useState([]);
   const [errorMessage2, setErrorMessage2] = useState(null);
   const [isLoading2, setIsLoading2] = useState(true);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -113,13 +114,14 @@ const MoviePage = () => {
                     </p>
                   </div>
                   <div className="space-y-4 my-6">
-                    <Link to = "/test"><button
+                    <button
                       className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4
                   font-semibold rounded-md hover:bg-primary-red hover:text-white
                   duration-300"
-                    >
+                    
+                    onClick={() => navigate(`/play/${movie._id}`)}>
                       <IoPlay /> Play
-                    </button></Link>
+                    </button>
                   </div>
                   <div>
                     <h2 className="text-2xl font-semibold mb-5">Details</h2>

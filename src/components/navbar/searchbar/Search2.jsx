@@ -60,8 +60,6 @@ const SearchBar = () => {
     }
   }, [query]);
 
-  const handleTitleSearch = async (inputValue) => {};
-
   const handleChange = async (event) => {
     const inputValue = event.target.value;
     setQuery(inputValue);
@@ -76,9 +74,10 @@ const SearchBar = () => {
         setSuggestions([]);
         return;
       }
+
       try {
         const response = await axios.get(
-          `${isTitle ? TITLE_SEARCH_URL : PLOT_SEARCH_URL}/?${isTitle ? "title" : "plot"}=${inputValue}`
+          `${isTitle ? TITLE_SEARCH_URL : PLOT_SEARCH_URL}/?query=${inputValue}`
         );
         setSuggestions(response.data);
         setShowSuggestions(true);
@@ -189,8 +188,12 @@ const SearchBar = () => {
             {suggestions.map((movie, index) => (
               <li
                 key={index}
-                onClick={() => handleSelectSuggestion(movie.title)}
+                onClick={() => {
+                  handleSelectSuggestion(movie.title);
+                  navigate(`/movies/${movie._id}`);
+                }}
                 className={highlightedIndex === index ? "highlighted" : ""}
+                onMouseEnter={() => setHighlightedIndex(index)}
               >
                 {movie.title}
               </li>

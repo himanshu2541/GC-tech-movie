@@ -1,65 +1,66 @@
 import React from "react";
 // import axios from "axios";
-import axios, { axiosPrivate } from "../../api/axios";
-import { useAuth } from "../../hooks/useAuth";
-import useRefreshToken from "../../hooks/useRefreshToken";
+// import Razorpay from "razorpay";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const SubsCard = ({ title, price, res }) => {
+  const axiosPrivate = useAxiosPrivate();
 
-  const refresh = useRefreshToken();
-
+  
   const checkouthandler = async () => {
-    await refresh();
     console.log(price);
-
-    const {data:{Key}} = await axios.get("http://localhost:3000/payment/getkey").then((res)=>{
+    const {
+      data: { Key },
+    } = await axiosPrivate.get("/payment/getkey").then((res) => {
       console.log(res);
-      if(res.status!=200) alert("Something Went Wrong!!! Please Try again.")
+      if (res.status !== 200)
+        alert("Something Went Wrong!!! Please Try again.");
       return res;
-    })
-
+    });
 
     console.log(Key);
-    const { data: { id } } = await axios.post("http://localhost:3000/payment/create/order-id", {
-      "amount": price * 100,
-      "currency": "INR",
-      "receipt": "rcpt"
+
+    const {
+      data: { id },
+    } = await axiosPrivate.post("/payment/create/order-id", {
+      amount: price * 100,
+      currency: "INR",
+      receipt: "rcpt",
     });
 
     console.log(id);
 
     var options = {
-      "key": Key, // Enter the Key ID generated from the Dashboard
-      "amount": price * 100,
-      "currency": "INR",
-      "name": "KGPLAY",
-      "description": "KGPLAY",
-      "order_id": id,
-      "handler":  (response) =>{
+      key: Key, // Enter the Key ID generated from the Dashboard
+      amount: price * 100,
+      currency: "INR",
+      name: "KGPLAY",
+      description: "KGPLAY",
+      order_id: id,
+      handler: (response) => {
         alert("PAYMENT ID - " + response.razorpay_payment_id);
         console.log("PAYMENT ID - " + response.razorpay_payment_id);
-        alert("ORDER ID - " + response.razorpay_order_id );
-        console.log("ORDER ID - " + response.razorpay_order_id );
+        alert("ORDER ID - " + response.razorpay_order_id);
+        console.log("ORDER ID - " + response.razorpay_order_id);
         alert("SIGNATURE - " + response.razorpay_signature);
         console.log("SIGNATURE - " + response.razorpay_signature);
-       
-        axiosPrivate.post("/payment/verify",{
-          "amount": price * 100,
-          "PaymentID":response.razorpay_payment_id,
-          "OrderID":response.razorpay_order_id ,
-          "Signature": response.razorpay_signature
-        })
-        
+
+        axiosPrivate.post("/payment/verify", {
+          amount: price * 100,
+          PaymentID: response.razorpay_payment_id,
+          OrderID: response.razorpay_order_id,
+          Signature: response.razorpay_signature,
+        });
+
         // }.then(function(response) {
         //   alert(JSON.stringify(response.data));
         // }).catch(function(error) {
         //   console.error(error);
         // })
-        
       },
-      "prefill": {
-        "email": "gaurav.kumar@example.com",
-        "contact": +919900000000,
+      prefill: {
+        email: "gaurav.kumar@example.com",
+        contact: +919900000000,
       },
       // "config": {
       //   "display": {
@@ -96,15 +97,15 @@ const SubsCard = ({ title, price, res }) => {
       //         ]
       //       }
       //     },
-          "theme": {
-            "color": "#F01289"
-          }
+      theme: {
+        color: "#D40205",
+      },
       //   }
-      }
-    
+    };
 
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function(response) {
+    var rzp1 = new window.Razorpay(options);
+
+    rzp1.on("payment.failed", function (response) {
       alert(response.error.code);
       alert(response.error.description);
       alert(response.error.source);
@@ -115,8 +116,7 @@ const SubsCard = ({ title, price, res }) => {
     });
     var payment__id = rzp1.open();
     console.log(payment__id);
-    e.preventDefault();
-  }
+  };
 
   return (
     <div className="flex flex-col justify-between text-primary-black p-8 transition-shadow duration-300 bg-white border-2 rounded shadow-sm sm:items-center hover:shadow-lg hover:cursor-pointer group">
@@ -134,7 +134,10 @@ const SubsCard = ({ title, price, res }) => {
           <div className="font-semibold">{res}</div>
         </div>
         <div className="w-full mt-8 px-2">
-          <button className="bg-black text-white w-full py-3 px-5 rounded-lg group-hover:bg-primary-red duration-300" onClick={checkouthandler}>
+          <button
+            className="bg-black text-white w-full py-3 px-5 rounded-lg group-hover:bg-primary-red duration-300"
+            onClick={checkouthandler}
+          >
             Buy {title}
           </button>
         </div>

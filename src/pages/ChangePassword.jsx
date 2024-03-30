@@ -5,15 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { updatePasswordSchema } from "../utils/ValidationSchema";
 import { Button } from "../components";
-import { axiosPrivate } from "../api/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import useRefreshToken from "../hooks/useRefreshToken";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const CHANGE_PASSWORD_URL = "/user";
 export default function ChangePassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  const refresh = useRefreshToken();
+  const axiosPrivate = useAxiosPrivate();
   const [isPasswordUpdated, setIsPasswordUpdated] = useState(false);
   
   const {
@@ -34,7 +34,6 @@ export default function ChangePassword() {
     const { password, newPassword } = data;
 
     try {
-      await refresh();
       await axiosPrivate.patch(
         CHANGE_PASSWORD_URL,
         JSON.stringify({ password, newPassword }),

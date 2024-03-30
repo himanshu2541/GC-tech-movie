@@ -44,7 +44,7 @@ const GetSimilarDocuments = expressAsyncHandler(async (embeddings, limit) => {
         $vectorSearch: {
           queryVector: embeddings,
           path: "plot_embedding",
-          numCandidates: 100,
+          numCandidates: 500,
           limit: limit,
           index: "moviesPlotIndex",
         },
@@ -386,14 +386,15 @@ const vectorSearch = expressAsyncHandler(async (plot, limit) => {
       -0.011982721, -0.016967745, -0.0060913274, -0.007130985, -0.013109017,
       -0.009710136,
     ];
-    const documents = await GetSimilarDocuments(embeddings, limit);
+    const documents = GetSimilarDocuments(embeddings, limit);
+
     //await documents.forEach((documents) => console.dir(JSON.stringify(documents)));
     return documents;
   } catch (err) {
     console.log(err);
     throw createError.InternalServerError();
   }
-});
+})
 
 const semanticSearchResults = expressAsyncHandler(async (req, res) => {
   let result;
@@ -412,7 +413,6 @@ const semanticSearchResults = expressAsyncHandler(async (req, res) => {
   if (limit === "" || limit === undefined || isNaN(limit)) {
     limit = 25;
   }
-
 
   const documents = await vectorSearch(plot, limit);
 

@@ -15,7 +15,6 @@ import {
 } from "./pages";
 
 import Layout from "./layout/Layout";
-import FlowBiteCarousel from "./components/Carousel";
 import PaginatedItems from "./components/search-pagination/Pagination";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import PersistLogin from "./components/persistance/PersistLogin";
@@ -36,7 +35,7 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/test" element={<Test />} />
+      {/* <Route path="/test" element={<Test />} /> */}
 
       {/* Private Routes */}
       {/* Persist User to pages */}
@@ -47,8 +46,8 @@ const App = () => {
             <Route element={<GetMovies />}>
               <Route index element={<Home />} />
             </Route>
+            <Route path="/play/:id" element={<Test />} />
             <Route path="/movies/:id" element={<MoviePage />} />
-            <Route path="test" element={<FlowBiteCarousel />} />
             <Route path="/search/" element={<PaginatedItems />} />
             <Route path="/subscription" element={<Subscription />} />
             <Route path="/me" element={<Account />} />

@@ -1,37 +1,39 @@
-require("dotenv").config();
 var crypto = require("crypto");
 const User = require("./../models/userModel");
 const UserRole = require("./../models/userRoleModel");
-
+const expressAsyncHandler = require("express-async-handler");
 const express = require("express");
-// const { getAllUsers } = require("../controllers/adminController");
-// const { verifyAccessToken } = require("../helpers/jwt_helper");
-// const razorpay = require("razorpay");
-// const roleCheck = require("../middlewares/roleCheck");
+
 const createError = require("http-errors");
 const router = express.Router();
 const Razorpay = require("razorpay");
-const {
-  verifyAccessToken,
-  verifyRefreshToken,
-} = require("../helpers/jwt_helper");
-const generateToken = require("../helpers/generateToken");
+const { verifyAccessToken } = require("../helpers/jwt_helper");
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-router.get("/getkey", (req, res) => {
-  console.log("endpoint hit");
-  res.setHeader("Cache-Control", "no-store");
-  res.status(200).json({
-    Key: process.env.RAZORPAY_KEY_ID,
-  });
-});
+router.get(
+  "/getkey",
+  verifyAccessToken,
+  expressAsyncHandler((req, res) => {
+    console.log("endpoint hit");
+    res.setHeader("Cache-Control", "no-store");
+    res.status(200).json({
+      Key: process.env.RAZORPAY_KEY_ID,
+    });
+  })
+);
 
-router.post("/create/order-id", async (req, res) => {
-  try {
+router.post(
+  "/create/order-id",
+  verifyAccessToken,
+  expressAsyncHandler(async (req, res) => {
+    if (!req.body) {
+      throw createError.BadRequest();
+    }
+
     console.log("Create orderID request", req.body);
 
     var options = {
@@ -41,107 +43,90 @@ router.post("/create/order-id", async (req, res) => {
     };
 
     const order = await instance.orders.create(options);
-    res.status(200).json({ id: order["id"] });
-
     console.log(order);
-    res.send("orderID: " + order.id);
-  } catch (error) {
-    if (error.isJoi === true) {
-      throw createError.UnprocessableEntity(error.details[0].message);
+
+    if (!order) {
+      throw createError.InternalServerError();
     }
-    // throw createError.BadRequest();
-  }
-});
 
-router.post("/verify", async (req, res) => {
-  let body = req.body.OrderID + "|" + req.body.PaymentID;
+    res.status(200).json({ id: order["id"] });
+  })
+);
 
-  const id = await verifyRefreshToken(req.cookies.refreshToken);
+router.post(
+  "/verify",
+  verifyAccessToken,
+  expressAsyncHandler(async (req, res) => {
+    if (!req.body) {
+      throw createError.BadRequest();
+    }
 
-  console.log(id);
-  const amnt = req.body.amount;
-  console.log(amnt);
-  console.log(typeof amnt);
-  var expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(body.toString())
-    .digest("hex");
-  console.log("sig Received", req.body.Signature);
-  console.log("sig generated", expectedSignature);
+    if (!req.body.OrderID || !req.body.PaymentID) {
+      throw createError.BadRequest();
+    }
 
-  var response = { signatureIsValid: "false" };
-  if (expectedSignature === req.body.Signature) {
-    response = { signatureIsValid: "true" };
+    let body = req.body.OrderID + "|" + req.body.PaymentID;
+    const { id } = req.payload;
+
+    const amnt = req.body.amount;
+    console.log(amnt);
+
+    var expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    console.log("sig Received", req.body.Signature);
+    console.log("sig generated", expectedSignature);
+
+    let response = {
+      signatureIsValid: true,
+    };
+
+    if (expectedSignature !== req.body.Signature) {
+      response = { signatureIsValid: false };
+      throw createError.Unauthorized(response);
+    }
+
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      throw createError.NotFound("User not found");
+    }
+
+    const updateRole = async (tier) => {
+      console.log(tier);
+      await UserRole.findOneAndUpdate(
+        { UserId: user._id },
+        {
+          $pull: { Role: { $in: ["tier1", "tier2", "tier3", "tier4"] } },
+        }
+      );
+      await UserRole.findOneAndUpdate(
+        { UserId: user._id },
+        {
+          $push: { Role: tier },
+        }
+      );
+    };
 
     try {
-      // const userId = req.user.id; // Assuming you can get the user ID from the token
-      const user = await User.findById(id);
-      if (!user) {
-        throw new Error("User not found");
+      if (amnt === 9900) {
+        updateRole("tier3");
+      } else if (amnt === 19900) {
+        updateRole("tier2");
+      } else if (amnt === 49900) {
+        updateRole("tier1");
       }
-
-      let role;
-      try {
-        if (amnt === 99) {
-          user.Role = "tier1";
-          role = await UserRole.findOneAndUpdate(
-            { UserId: user._id },
-            { Role: ["tier1"] }
-          );
-        } else if (amnt === 199) {
-          user.Role = "tier2";
-          role = await UserRole.findOneAndUpdate(
-            { UserId: user._id },
-            { Role: ["tier2"] }
-          );
-        } else if (amnt === 499) {
-          user.Role = "tier3";
-          role = await UserRole.findOneAndUpdate(
-            { UserId: user._id },
-            { Role: ["tier3"] }
-          );
-        }
-      } catch (err) {
-        throw createError.InternalServerError(err);
-      }
-
-      // switch (amnt) {
-      //   case 99:
-      //     user.Role = "tier1";
-      //     await UserRole.findOneAndUpdate(
-      //       { UserId: user._id },
-      //       { Role: ["tier1"] }
-      //     );
-      //     break;
-      //   case 199:
-      //     user.Role = "tier2";
-      //     await UserRole.findOneAndUpdate(
-      //       { UserId: user._id },
-      //       { Role: ["tier2"] }
-      //     );
-      //   case 499:
-      //     user.Role = "tier3";
-      //     await UserRole.findOneAndUpdate(
-      //       { UserId: user._id },
-      //       { Role: ["tier3"] }
-      //     );
-      //     break;
-      //   // Add more cases for other amounts if needed
-      // }
-
-      // Save the updated user
-      await user.save();
-
-      response.message = "Role updated successfully";
-      console.log(response.message);
-    } catch (error) {
-      console.error("Error updating user role:", error);
-      response.error = "Error updating user role";
+    } catch (err) {
+      console.log(err);
+      throw createError.InternalServerError("Error while updating the role");
     }
-  }
 
-  res.send(response);
-  // response = { signatureIsValid: "true" };
-});
+    response.message = "Role updated successfully";
+
+    res.status(200).send(response);
+  })
+);
 
 module.exports = router;

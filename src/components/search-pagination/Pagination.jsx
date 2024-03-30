@@ -10,7 +10,7 @@ function Cards({ currentItems }) {
   return (
     <div className="grid grid-cols-5 gap-3">
       {currentItems &&
-        currentItems.map((movie) => <Card key={movie.id} movie={movie} />)}
+        currentItems.map((movie) => <Card key={movie._id} movie={movie} />)}
     </div>
   );
 }
@@ -31,9 +31,9 @@ function PaginatedItems({ itemsPerPage = 10 }) {
     const getMovieDetails = async () => {
       try {
         const response = await axios.get(
-          `/search/${isTitle==="true" ? "title" : "plot"}`,
+          `/search/${isTitle === "true" ? "title" : "plot"}`,
           {
-            params: { query: query, limit: 100 },
+            params: { query: query, limit: 200 },
             // signal: controller.signal,
           }
         );
@@ -44,29 +44,26 @@ function PaginatedItems({ itemsPerPage = 10 }) {
         console.log(err.response);
         if (err?.response?.status === 422) {
           setErrorMessage("No results found");
-        } 
-        else if (err?.response?.status === 404) {
+        } else if (err?.response?.status === 404) {
           setErrorMessage("No results found");
         } else {
           setErrorMessage("Something went wrong");
         }
-      } finally{
+      } finally {
         setIsLoading(false);
       }
     };
     getMovieDetails();
-    
   }, [query, isTitle]);
 
-
-  useEffect(()=> {
+  useEffect(() => {
     setMovieData(movieData);
-  }, [movieData])
+  }, [movieData]);
 
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = movieData.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(movieData.length / itemsPerPage);
-
+  // console.log(currentItems)
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % movieData.length;
     setItemOffset(newOffset);

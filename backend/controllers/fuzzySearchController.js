@@ -39,11 +39,15 @@ const fuzzySearchResults = expressAsyncHandler(async (request, response) => {
   }
 
   const title = result.query;
-  let { limit } = request.query;
+  let { limit } = result.limit;
 
   limit = Number(limit);
   if(limit==="" || limit === undefined || isNaN(limit)) {
     limit = 25
+  }
+
+  if(!title){
+    throw createError.BadRequest();
   }
 
 
@@ -93,6 +97,7 @@ const fuzzySearchResults = expressAsyncHandler(async (request, response) => {
           score: { $add: ["$customScore", { $meta: "searchScore" }] },
         },
       },
+
       {
         $project: {
           _id: 1,

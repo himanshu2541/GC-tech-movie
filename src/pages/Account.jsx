@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
 import DeleteAccount from "../components/account/DeleteAccount";
 import { sha256 } from "js-sha256";
-
+import useRefreshToken from "../hooks/useRefreshToken";
 const UserCard = ({ user }) => {
   const IMG_URL =
     "https://gravatar.com/avatar/" +
@@ -14,30 +14,30 @@ const UserCard = ({ user }) => {
   return (
     <div className="p-6 font-lg text-white flex flex-col items-center justify-center bg-gray-800 rounded-lg">
       <div className=" flex justify-center items-center">
-        <img src={IMG_URL} alt={`${user.name}`} className="w-32 h-32 rounded-full border-4 border-gray-700" />
+        <img
+          src={IMG_URL}
+          alt={`${user.name}`}
+          className="w-32 h-32 rounded-full border-4 border-gray-700"
+        />
       </div>
-      
-        <div className="mt-2">
-          <p className="text-4xl font-bold mt-2">{user.name}</p>
+
+      <div className="mt-2">
+        <p className="text-4xl font-bold mt-2">{user.name}</p>
+      </div>
+      <div>
+        <p className="text-gray-300 ">{user.email}</p>
+      </div>
+      <div className="flex item-center justify-center">
+        <p className="text-lg font-medium mt-4">Active Plan:</p>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {user.role.map((role) => (
+            <span key={role} className="px-3  text-lg font-semibold">
+              {role}
+            </span>
+          ))}
         </div>
-        <div>
-      <p className="text-gray-300 ">{user.email}</p>
       </div>
-        <div className = "flex item-center justify-center">
-          <p className="text-lg font-medium mt-4">Active Plan:</p>
-          <div className="flex flex-wrap gap-2 mt-4">
-            {user.role.map((role) => (
-              <span
-                key={role}
-                className="px-3  text-lg font-semibold"
-              >
-                {role}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    
+    </div>
   );
 };
 
@@ -64,7 +64,7 @@ const Account = () => {
     let isMounted = true;
     const controller = new AbortController();
     const getUser = async () => {
-    try {
+      try {
         const response = await axiosPrivate.get("/user", {
           signal: controller.signal,
         });
@@ -94,7 +94,7 @@ const Account = () => {
             >
               Change Password
             </Button>
-            <DeleteAccount className={"ml-4 p-4 "}/>
+            <DeleteAccount className={"ml-4 p-4 "} />
           </div>
         </div>
       )}
