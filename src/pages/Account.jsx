@@ -5,18 +5,30 @@ import { Button } from "flowbite-react";
 import DeleteAccount from "../components/account/DeleteAccount";
 import { sha256 } from "js-sha256";
 
+const getRoleLabel = (role) => {
+  switch (role) {
+    case "tier4": return "Free"
+    case "tier3": return "Basic"
+    case "tier2": return "Standard"
+    case "tier1": return "Premium"
+  }
+}
+
 const UserCard = ({ user }) => {
+  let userRoles = user.role
   const IMG_URL =
     "https://gravatar.com/avatar/" +
     sha256(String(user.email).trim().toLowerCase()) +
     "?d=robohash&s=256";
-
+  if (user.role.length > 1){
+    userRoles = user.role.filter((item) => getRoleLabel(item) !== "Free")
+  }
   return (
     <div className="p-6 font-lg text-white flex flex-col items-center justify-center bg-gray-800 rounded-lg">
       <div className=" flex justify-center items-center">
         <img src={IMG_URL} alt={`${user.name}`} className="w-32 h-32 rounded-full border-4 border-gray-700" />
       </div>
-      
+
         <div className="mt-2">
           <p className="text-4xl font-bold mt-2">{user.name}</p>
         </div>
@@ -26,18 +38,18 @@ const UserCard = ({ user }) => {
         <div className = "flex item-center justify-center">
           <p className="text-lg font-medium mt-4">Active Plan:</p>
           <div className="flex flex-wrap gap-2 mt-4">
-            {user.role.map((role) => (
+            {userRoles.map((role) => (
               <span
                 key={role}
-                className="px-3  text-lg font-semibold"
+                className="px-3 text-lg font-semibold"
               >
-                {role}
+                {getRoleLabel(role)}
               </span>
             ))}
           </div>
         </div>
       </div>
-    
+
   );
 };
 
