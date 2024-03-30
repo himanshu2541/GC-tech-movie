@@ -30,7 +30,7 @@ const ROLES = {
 
 const App = () => {
   return (
-    <div className="app w-screen h-screen mx-auto">
+    <div className="app w-full h-screen mx-auto">
     <Routes>
       {/* Public routes */}
       <Route path="/login" element={<Login />} />

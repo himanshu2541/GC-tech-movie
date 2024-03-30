@@ -5,6 +5,7 @@ import MovieSections from "../components/home/MovieSections";
 import { useParams } from "react-router-dom";
 import axios from "../api/axios";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 const GET_MOVIE = "/movies";
 
@@ -112,13 +113,13 @@ const MoviePage = () => {
                     </p>
                   </div>
                   <div className="space-y-4 my-6">
-                    <button
+                    <Link to = "/test"><button
                       className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4
                   font-semibold rounded-md hover:bg-primary-red hover:text-white
                   duration-300"
                     >
                       <IoPlay /> Play
-                    </button>
+                    </button></Link>
                   </div>
                   <div>
                     <h2 className="text-2xl font-semibold mb-5">Details</h2>
