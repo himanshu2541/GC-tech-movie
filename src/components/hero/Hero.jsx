@@ -26,7 +26,7 @@ const Hero = () => {
             and
           </h2>
           <div className="my-4 text-lg">
-            <Link to ="/test"><button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
+            <Link to ="/play/1"><button className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4 font-semibold rounded-md hover:bg-primary-red hover:text-white duration-300">
               <IoPlay /> Play
             </button></Link>
           </div>

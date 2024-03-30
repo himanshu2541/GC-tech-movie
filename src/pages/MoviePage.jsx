@@ -113,7 +113,7 @@ const MoviePage = () => {
                     </p>
                   </div>
                   <div className="space-y-4 my-6">
-                    <Link to = "/test"><button
+                    <Link to={`/play/${movie._id}`}><button
                       className="flex items-center gap-2 bg-white text-black py-2 pl-3 pr-4
                   font-semibold rounded-md hover:bg-primary-red hover:text-white
                   duration-300"
