@@ -6,11 +6,13 @@ import DeleteAccount from "../components/account/DeleteAccount";
 import { sha256 } from "js-sha256";
 
 const getRoleLabel = (role) => {
+
   switch (role) {
-    case "tier4": return "Free"
-    case "tier3": return "Basic"
-    case "tier2": return "Standard"
+    case "admin": return "Admin"
     case "tier1": return "Premium"
+    case "tier2": return "Standard"
+    case "tier3": return "Basic"
+    case "tier4": return "Free"
   }
 }
 

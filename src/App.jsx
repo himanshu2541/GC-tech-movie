@@ -41,7 +41,7 @@ const App = () => {
       {/* Persist User to pages */}
       <Route element={<PersistLogin />}>
         {/* User routes */}
-        <Route element={<ProtectedRoutes allowedRoles={ROLES.user} />}>
+        <Route element={<ProtectedRoutes allowedRoles={ROLES.user+ROLES.admin} />}>
           <Route path="/" element={<Layout />}>
             <Route element={<GetMovies />}>
               <Route index element={<Home />} />

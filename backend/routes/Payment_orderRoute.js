@@ -42,16 +42,17 @@ router.post(
       receipt: "rcpt",
     };
 
-    const order = await instance.orders.create(options);
-    console.log(order);
-
-    if (!order) {
+    let order;
+    try {
+      order = await instance.orders.create(options);
+    } catch (err) {
+      console.log(err);
       throw createError.InternalServerError();
     }
 
-    res.status(200).json({ id: order["id"] });
-  })
-);
+    res.status(200).json({id: order["id"]});
+  }
+))
 
 router.post(
   "/verify",
@@ -93,20 +94,20 @@ router.post(
     if (!user) {
       throw createError.NotFound("User not found");
     }
+    
 
+    let updatedRole;
     const updateRole = async (tier) => {
       console.log(tier);
+
       await UserRole.findOneAndUpdate(
         { UserId: user._id },
-        {
-          $pull: { Role: { $in: ["tier1", "tier2", "tier3", "tier4"] } },
-        }
+        { $pull: { Role: { $in: ["tier1", "tier2", "tier3"] } } }
       );
-      await UserRole.findOneAndUpdate(
+      
+      updatedRole = await UserRole.findOneAndUpdate(
         { UserId: user._id },
-        {
-          $push: { Role: tier },
-        }
+        { $push: { Role: tier } }
       );
     };
 
@@ -124,6 +125,8 @@ router.post(
     }
 
     response.message = "Role updated successfully";
+
+    console.log(updatedRole)
 
     res.status(200).send(response);
   })

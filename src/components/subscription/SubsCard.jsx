@@ -6,9 +6,9 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 const SubsCard = ({ title, price, res }) => {
   const axiosPrivate = useAxiosPrivate();
 
-  
   const checkouthandler = async () => {
     console.log(price);
+
     const {
       data: { Key },
     } = await axiosPrivate.get("/payment/getkey").then((res) => {
@@ -21,12 +21,12 @@ const SubsCard = ({ title, price, res }) => {
     console.log(Key);
 
     const {
-      data: { id },
-    } = await axiosPrivate.post("/payment/create/order-id", {
-      amount: price * 100,
-      currency: "INR",
-      receipt: "rcpt",
-    });
+      data: {id}
+    }= await axiosPrivate.post("/payment/create/order-id", {
+        amount: price * 100,
+        currency: "INR",
+        receipt: "rcpt",
+      });
 
     console.log(id);
 
@@ -116,6 +116,7 @@ const SubsCard = ({ title, price, res }) => {
     });
     var payment__id = rzp1.open();
     console.log(payment__id);
+    
   };
 
   return (
